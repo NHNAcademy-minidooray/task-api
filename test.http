@@ -1,0 +1,29 @@
+GET http://localhost:8080/projects
+
+###
+
+GET http://localhost:8080/projects/1
+
+###
+
+POST http://localhost:8080/projects
+Content-Type: application/json
+
+{
+  "projectTitle": "test11",
+  "projectContent" : "test-project"
+}
+
+###
+
+PATCH http://localhost:8080/projects/3
+Content-Type: application/json
+
+{
+  "projectTitle": "*** test ***",
+  "projectContent" : "test-project"
+}
+
+###
+
+DELETE http://localhost:8080/projects/3
