@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Projects")
@@ -33,5 +34,6 @@ public class Project {
     @Column(name = "project_created_at")
     private LocalDateTime projectCreatedAt;
 
-
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.REMOVE})
+    private List<ProjectMember> projectMembers;
 }

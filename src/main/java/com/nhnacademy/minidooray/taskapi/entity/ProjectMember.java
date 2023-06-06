@@ -6,9 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
-@Table(name = "PojectMembers")
+@Table(name = "ProjectMembers")
 @Builder
 @Getter
 @NoArgsConstructor
@@ -16,7 +17,7 @@ import javax.persistence.*;
 public class ProjectMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "project_member_seq)")
+    @Column(name = "project_member_seq")
     private Integer projectMemberSeq;
 
     @Column(name = "project_member_id")

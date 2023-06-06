@@ -32,7 +32,7 @@ public class Task {
     @ManyToOne
     private Milestone milestone;
 
-    @JoinColumn(name = "project_member_seq")
+    @JoinColumn(name = "project_member_id")
     @ManyToOne
     private ProjectMember projectMember;
 

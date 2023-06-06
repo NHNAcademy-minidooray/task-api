@@ -26,7 +26,7 @@ public class Comment {
     @Column(name = "comment_content")
     private String commentContent;
 
-    @JoinColumn(name = "project_member_seq")
+    @JoinColumn(name = "project_member_id")
     @ManyToOne
     private ProjectMember projectMember;
 }

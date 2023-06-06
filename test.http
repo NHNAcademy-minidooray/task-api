@@ -1,3 +1,5 @@
+# project
+
 GET http://localhost:8080/projects
 
 ###
@@ -6,7 +8,7 @@ GET http://localhost:8080/projects/1
 
 ###
 
-POST http://localhost:8080/projects
+POST http://localhost:8080/projects/goback10000
 Content-Type: application/json
 
 {
@@ -27,3 +29,31 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:8080/projects/3
+
+###
+
+
+# project-member
+GET http://localhost:8080/projects/2/accounts
+
+###
+
+
+GET http://localhost:8080/projects/2/accounts/goback10000
+
+
+###
+GET http://localhost:8080/projects/accounts/goback10000
+
+
+###
+POST http://localhost:8080/projects/2/accounts
+Content-Type: application/json
+
+{
+    "projectMemberId" : "minidooray",
+    "projectSeq" : 2
+}
+
+###
+DELETE http://localhost:8080/projects/2/accounts/minidooray
