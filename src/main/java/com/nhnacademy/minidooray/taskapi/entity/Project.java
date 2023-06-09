@@ -36,4 +36,7 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = {CascadeType.REMOVE})
     private List<ProjectMember> projectMembers;
+
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.REMOVE})
+    private List<Tag> tags;
 }

@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Tags")
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,4 +26,17 @@ public class Tag {
     @JoinColumn(name = "project_seq")
     @ManyToOne
     private Project project;
+
+    @OneToMany(mappedBy = "tag", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private List<TaskTag> taskTags;
+
+    @Builder
+    public Tag(String tagName, Project project) {
+        this.tagName = tagName;
+        this.project = project;
+    }
+
+    public void update(String tagName) {
+        this.tagName = tagName;
+    }
 }

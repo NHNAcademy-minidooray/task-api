@@ -1,4 +1,4 @@
-package com.nhnacademy.minidooray.taskapi.repository;
+package com.nhnacademy.minidooray.taskapi.repository.project;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;

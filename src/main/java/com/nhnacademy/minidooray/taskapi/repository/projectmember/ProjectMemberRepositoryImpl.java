@@ -1,10 +1,11 @@
-package com.nhnacademy.minidooray.taskapi.repository;
+package com.nhnacademy.minidooray.taskapi.repository.projectmember;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.entity.ProjectMember;
 import com.nhnacademy.minidooray.taskapi.entity.QProject;
 import com.nhnacademy.minidooray.taskapi.entity.QProjectMember;
+import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -39,7 +40,8 @@ public class ProjectMemberRepositoryImpl extends QuerydslRepositorySupport imple
                 .where(projectMember.projectMemberId.eq(projectMemberId))
                 .select(Projections.constructor(ProjectMemberDto.class, projectMember.projectMemberSeq,
                         projectMember.projectMemberId, projectMember.projectMemberRole))
-                .fetch().get(0);
+                .fetch().stream().findFirst()
+                .orElseThrow(() -> new NotFoundException("프로젝트 멤버를 찾을 수 없습니다."));
     }
 
     @Override

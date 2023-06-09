@@ -1,14 +1,14 @@
-package com.nhnacademy.minidooray.taskapi.repository;
+package com.nhnacademy.minidooray.taskapi.repository.project;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
 import com.nhnacademy.minidooray.taskapi.entity.QProject;
 import com.nhnacademy.minidooray.taskapi.entity.QProjectMember;
+import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ProjectRepositoryImpl extends QuerydslRepositorySupport implements ProjectRepositoryCustom {
     public ProjectRepositoryImpl() {
@@ -49,6 +49,8 @@ public class ProjectRepositoryImpl extends QuerydslRepositorySupport implements 
                         project.projectTitle,projectMember.projectMemberId, projectMember.projectMemberRole,
                         project.statusCode.statusCodeName, project.projectContent,
                         project.projectCreatedAt))
-                .fetch().get(0);
+                .fetch().stream().findFirst()
+                .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없습니다."));
+
     }
 }

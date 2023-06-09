@@ -5,12 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Tasks")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @AllArgsConstructor
 @ToString
 public class Task {
@@ -32,8 +33,27 @@ public class Task {
     @ManyToOne
     private Milestone milestone;
 
-    @JoinColumn(name = "project_member_id")
+    @JoinColumn(name = "project_member_seq")
     @ManyToOne
     private ProjectMember projectMember;
+
+    @OneToMany(mappedBy = "task", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private List<TaskTag> taskTags = new ArrayList<>();
+
+    @Builder
+    public Task(String taskTitle, String taskContent, LocalDateTime taskCreatedAt, Milestone milestone, ProjectMember projectMember) {
+        this.taskTitle = taskTitle;
+        this.taskContent = taskContent;
+        this.taskCreatedAt = taskCreatedAt;
+        this.milestone = milestone;
+        this.projectMember = projectMember;
+    }
+
+    public void update(String taskTitle, String taskContent, Milestone milestone, List<TaskTag> taskTags) {
+        this.taskTitle = taskTitle;
+        this.taskContent = taskContent;
+        this.milestone = milestone;
+        this.taskTags =taskTags;
+    }
 
 }

@@ -1,17 +1,17 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
-import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
-import com.nhnacademy.minidooray.taskapi.domain.request.ProjectModifyRequest;
-import com.nhnacademy.minidooray.taskapi.domain.request.ProjectRegisterRequest;
-import com.nhnacademy.minidooray.taskapi.entity.Project;
+import com.nhnacademy.minidooray.taskapi.domain.request.project.ProjectModifyRequest;
+import com.nhnacademy.minidooray.taskapi.domain.request.project.ProjectRegisterRequest;
+import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.ProjectService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,25 +26,35 @@ public class ProjectRestController {
         return ResponseEntity.ok(projectService.getProjects());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProjectDto> getProject(@PathVariable Integer id) {
-        return ResponseEntity.ok(projectService.getProject(id));
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectDto> getProject(@PathVariable Integer projectId) {
+        return ResponseEntity.ok(projectService.getProject(projectId));
     }
 
     @PostMapping("/{accountId}")
-    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectRegisterRequest registerRequest, @PathVariable String accountId) {
+    public ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectRegisterRequest registerRequest,
+                                                    BindingResult bindingResult,
+                                                    @PathVariable String accountId) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(registerRequest, accountId));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ProjectDto> modifyProject(@RequestBody ProjectModifyRequest modifyRequest, @PathVariable Integer id) {
-        return ResponseEntity.ok(projectService.modifyProject(modifyRequest, id));
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<ProjectDto> modifyProject(@Valid @RequestBody ProjectModifyRequest modifyRequest,
+                                                    BindingResult bindingResult,
+                                                    @PathVariable Integer projectId) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+        return ResponseEntity.ok(projectService.modifyProject(modifyRequest, projectId));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{projectId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProject(@PathVariable Integer id) {
-        projectService.deleteProject(id);
+    public void deleteProject(@PathVariable Integer projectId) {
+        projectService.deleteProject(projectId);
     }
 
 

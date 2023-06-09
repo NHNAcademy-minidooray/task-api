@@ -1,4 +1,4 @@
-package com.nhnacademy.minidooray.taskapi.repository;
+package com.nhnacademy.minidooray.taskapi.repository.projectmember;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;

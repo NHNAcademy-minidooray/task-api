@@ -12,8 +12,8 @@ POST http://localhost:8080/projects/goback10000
 Content-Type: application/json
 
 {
-  "projectTitle": "test11",
-  "projectContent" : "test-project"
+  "title": "test11",
+  "content" : "test-project"
 }
 
 ###
@@ -22,8 +22,8 @@ PATCH http://localhost:8080/projects/3
 Content-Type: application/json
 
 {
-  "projectTitle": "*** test ***",
-  "projectContent" : "test-project"
+  "title": "*** test ***",
+  "content" : "test-project"
 }
 
 ###
@@ -47,13 +47,67 @@ GET http://localhost:8080/projects/accounts/goback10000
 
 
 ###
-POST http://localhost:8080/projects/2/accounts
+POST http://localhost:8080/projects/2/accounts/goback10000
 Content-Type: application/json
 
 {
-    "projectMemberId" : "minidooray",
-    "projectSeq" : 2
+    "id" : 3,
+  "members" : [
+    {
+      "id" :"test1"
+    },
+    {
+      "id" : "test2"
+    },
+    {
+      "id": "test3"
+    }
+  ]
+}
+
+###
+POST http://localhost:8080/projects/2/accounts/goback10000
+Content-Type: application/json
+
+{
+  "id" : 2,
+  "members" : [
+    {
+      "id" :"test1"
+    }
+  ]
 }
 
 ###
 DELETE http://localhost:8080/projects/2/accounts/minidooray
+
+###
+
+# tag
+GET http://localhost:8080/projects/1/tags
+
+
+###
+GET http://localhost:8080/projects/1/tasks/tags/1
+
+
+###
+POST http://localhost:8080/projects/1/tags
+Content-Type: application/json
+
+{
+  "name" : "tag-test-create"
+}
+
+###
+PATCH http://localhost:8080/projects/1/tags/7
+Content-Type: application/json
+
+{
+  "name" : "tag-test-update"
+}
+
+###
+DELETE http://localhost:8080/projects/1/tags/7
+
+# task

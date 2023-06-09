@@ -2,30 +2,33 @@ package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
-import com.nhnacademy.minidooray.taskapi.domain.request.ProjectMemberRegisterRequest;
+import com.nhnacademy.minidooray.taskapi.domain.request.projectmember.ProjectMemberRegisterRequest;
+import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.ProjectMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ProjectMemberRestController {
     private final ProjectMemberService projectMemberService;
 
     @GetMapping("/projects/{projectId}/accounts")
-    public ResponseEntity<List<ProjectMemberDto>> getProjectMembers(@PathVariable("projectId") Integer projectSeq) {
-        return ResponseEntity.ok(projectMemberService.getProjectMembers(projectSeq));
+    public ResponseEntity<List<ProjectMemberDto>> getProjectMembers(@PathVariable Integer projectId) {
+        return ResponseEntity.ok(projectMemberService.getProjectMembers(projectId));
     }
 
     @GetMapping("/projects/{projectId}/accounts/{accountId}")
-    public ResponseEntity<ProjectMemberDto> getProjectMember(@PathVariable("projectId")Integer projectSeq,
+    public ResponseEntity<ProjectMemberDto> getProjectMember(@PathVariable Integer projectId,
                                                              @PathVariable String accountId) {
-        return ResponseEntity.ok(projectMemberService.getProjectMember(projectSeq, accountId));
+        return ResponseEntity.ok(projectMemberService.getProjectMember(projectId, accountId));
     }
 
     @GetMapping("/projects/accounts/{accountId}")
@@ -33,12 +36,18 @@ public class ProjectMemberRestController {
         return ResponseEntity.ok(projectMemberService.getProjects(accountId));
     }
 
-    @PostMapping("/projects/{projectId}/accounts")
-    public ResponseEntity<ProjectMemberDto> createProjectMember(@RequestBody ProjectMemberRegisterRequest registerRequest,
-                                                                @PathVariable("projectId") Integer projectSeq) {
+    @PostMapping("/projects/{projectId}/accounts/{accountId}")
+    public ResponseEntity<ProjectMemberDto> createProjectMember(@Valid @RequestBody ProjectMemberRegisterRequest registerRequest,
+                                                                BindingResult bindingResult,
+                                                                @PathVariable Integer projectId,
+                                                                @PathVariable String accountId) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(projectMemberService.createProjectMember(registerRequest, projectSeq));
+                .body(projectMemberService.createProjectMember(registerRequest, projectId, accountId));
     }
 
     @DeleteMapping("/projects/{projectId}/accounts/{accountId}")
