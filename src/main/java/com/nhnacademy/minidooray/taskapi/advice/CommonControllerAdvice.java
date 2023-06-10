@@ -25,7 +25,19 @@ public class CommonControllerAdvice {
     public ResponseEntity<Error> notFound(NotFoundException e, HttpServletRequest req) {
         Error error = Error.builder()
                 .timeStamp(LocalDateTime.now())
-                .status(204)
+                .status(404)
+                .error(e.getMessage())
+                .path(req.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(HttpClientErrorException.NotFound.class)
+    public ResponseEntity<Error> notFound(HttpClientErrorException.NotFound e, HttpServletRequest req) {
+        Error error = Error.builder()
+                .timeStamp(LocalDateTime.now())
+                .status(404)
                 .error(e.getMessage())
                 .path(req.getRequestURI())
                 .build();

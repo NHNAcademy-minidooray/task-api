@@ -2,6 +2,7 @@ package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.nhnacademy.minidooray.taskapi.domain.TagDto;
 import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.tag.TagModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.tag.TagRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
@@ -27,7 +28,7 @@ public class TagRestController {
     }
 
     @GetMapping("/projects/{projectId}/tasks/tags/{tagId}")
-    public ResponseEntity<List<TaskDto>> getTasks(@PathVariable Integer projectId, @PathVariable Integer tagId) {
+    public ResponseEntity<List<TaskListDto>> getTasks(@PathVariable Integer projectId, @PathVariable Integer tagId) {
         return ResponseEntity.ok(tagService.getTasks(projectId, tagId));
     }
 

@@ -31,6 +31,11 @@ public class ProjectMemberRestController {
         return ResponseEntity.ok(projectMemberService.getProjectMember(projectId, accountId));
     }
 
+    /**
+     * 해당 계정의 프로젝트 조회
+     * @param accountId
+     * @return
+     */
     @GetMapping("/projects/accounts/{accountId}")
     public ResponseEntity<List<ProjectDto>> getProjects(@PathVariable String accountId) {
         return ResponseEntity.ok(projectMemberService.getProjects(accountId));

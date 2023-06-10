@@ -2,6 +2,7 @@ package com.nhnacademy.minidooray.taskapi.service;
 
 import com.nhnacademy.minidooray.taskapi.domain.TagDto;
 import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.tag.TagModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.tag.TagRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
@@ -29,17 +30,28 @@ public class TagService {
         return tagRepository.getTags(projectSeq);
     }
 
-    public List<TaskDto> getTasks(Integer projectSeq, Integer tagSeq) {
+    public List<TaskListDto> getTasks(Integer projectSeq, Integer tagSeq) {
         if(!projectRepository.existsById(projectSeq)) {
             throw new NotFoundException("등록되지 않은 프로젝트입니다.");
         }
-        if (!tagRepository.existsById(tagSeq)) {
-            throw new NotFoundException("등록되지 않은 태그입니다.");
-        }
+
         tagRepository.getTag(tagSeq).orElseThrow(
                 () -> new NotFoundException("해당 프로젝트에 등록되지 않은 태그입니다."));
 
         return tagRepository.getTasks(projectSeq, tagSeq);
+    }
+
+
+    //todo 보류
+    public TagDto getTag(Integer projectSeq, Integer tagSeq) {
+        if(!projectRepository.existsById(projectSeq)) {
+            throw new NotFoundException("등록되지 않은 프로젝트입니다.");
+        }
+
+        TagDto tagDto = tagRepository.getTag(tagSeq).orElseThrow(
+                () -> new NotFoundException("해당 프로젝트에 등록되지 않은 태그입니다."));
+
+        return tagDto;
     }
 
    @Transactional

@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
@@ -25,7 +26,7 @@ public class TaskRestController {
      * @return 해당 프로젝트 업무 리스트
      */
     @GetMapping("/projects/{projectId}/tasks")
-    public ResponseEntity<List<TaskDto>> getProjectTasks(@PathVariable Integer projectId) {
+    public ResponseEntity<List<TaskListDto>> getProjectTasks(@PathVariable Integer projectId) {
         return ResponseEntity.ok(taskService.getProjectTasks(projectId));
     }
 
@@ -48,7 +49,7 @@ public class TaskRestController {
      * @return 작성자가 작성한 업무 리스트
      */
     @GetMapping("/projects/{projectId}/tasks/accounts/{accountId}")
-    public ResponseEntity<List<TaskDto>> getTasks(@PathVariable Integer projectId, @PathVariable String accountId) {
+    public ResponseEntity<List<TaskListDto>> getTasks(@PathVariable Integer projectId, @PathVariable String accountId) {
         return ResponseEntity.ok(taskService.getTasks(projectId, accountId));
     }
 

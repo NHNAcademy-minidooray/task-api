@@ -1,5 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -19,21 +21,30 @@ import java.util.List;
 @JsonRootName("task")
 public class TaskDto {
     @NotNull
+    @JsonProperty("id")
     private Integer taskSeq;
     @NotBlank
+    @JsonProperty("title")
     private String taskTitle;
     @NotBlank
+    @JsonProperty("content")
     private String taskContent;
     @NotNull
+    @JsonProperty("created-at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime taskCreatedAt;
     @NotBlank
+    @JsonProperty("writer")
     private String projectMemberId;
     @NotBlank
+    @JsonProperty("role")
     private String projectMemberRole;
     @Nullable
+    @JsonProperty("milestone")
     private String milestoneName;
 
     @Nullable
+    @JsonProperty("tag")
     private List<String> tagNames = new ArrayList<>();
 
     public TaskDto(Integer taskSeq, String taskTitle, String taskContent, LocalDateTime taskCreatedAt,

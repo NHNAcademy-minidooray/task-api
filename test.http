@@ -1,8 +1,8 @@
 # project
-
+### 모든 프로젝트 조회
 GET http://localhost:8080/projects
 
-###
+### 해당 프로젝트 조회
 
 GET http://localhost:8080/projects/1
 
@@ -110,4 +110,42 @@ Content-Type: application/json
 ###
 DELETE http://localhost:8080/projects/1/tags/7
 
+
+###
+# milestone
+GET http://localhost:8080/projects/1/milestones
+
+### 1번 마일스톤이 등록된 task 조회
+GET http://localhost:8080/projects/1/tasks/milestones/1
+
+###
+GET http://localhost:8080/projects/1/milestones/1
+
+###
+POST http://localhost:8080/projects/1/milestones
+Content-Type: application/json
+
+{
+  "name" : "test-milestone-create",
+  "start" : "2023-06-10",
+  "end" : "2023-06-16"
+}
+
+###
+PATCH http://localhost:8080/projects/1/milestones/5
+Content-Type: application/json
+
+{
+  "name" : "test-milestone-update",
+  "start" : "2023-06-02",
+  "end" : "2023-06-16"
+}
+
+###
+DELETE http://localhost:8080/projects/1/milestones/1
+
+
+###
+
 # task
+

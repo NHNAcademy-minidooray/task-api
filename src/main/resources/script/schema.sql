@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS Milestones
     `milestone_seq`           INT          NOT NULL AUTO_INCREMENT,
     `project_seq`             INT          NOT NULL,
     `milestone_name`          VARCHAR(100) NOT NULL,
-    `milestone_start_period`  DATETIME     NULL DEFAULT NULL,
-    `milestone_end_of_period` DATETIME     NULL DEFAULT NULL,
+    `milestone_start_period`  DATE     NULL DEFAULT NULL,
+    `milestone_end_of_period` DATE     NULL DEFAULT NULL,
     PRIMARY KEY (`milestone_seq`),
     CONSTRAINT `fk_Milestone_Project1`
         FOREIGN KEY (`project_seq`)
@@ -84,7 +84,8 @@ CREATE TABLE IF NOT EXISTS Tasks
     PRIMARY KEY (`task_seq`),
     CONSTRAINT `fk_Task_Milestone1`
         FOREIGN KEY (`milestone_seq`)
-            REFERENCES Milestones (`milestone_seq`),
+            REFERENCES Milestones (`milestone_seq`)
+            on delete set null,
     CONSTRAINT `fk_Task_ProjectMember1`
         FOREIGN KEY (`project_member_seq`)
             REFERENCES ProjectMembers (`project_member_seq`)

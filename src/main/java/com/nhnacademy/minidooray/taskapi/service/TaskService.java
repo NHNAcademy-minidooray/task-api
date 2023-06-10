@@ -1,11 +1,12 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
 import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.entity.*;
 import com.nhnacademy.minidooray.taskapi.exception.*;
-import com.nhnacademy.minidooray.taskapi.repository.MilestoneRepository;
+import com.nhnacademy.minidooray.taskapi.repository.milestone.MilestoneRepository;
 import com.nhnacademy.minidooray.taskapi.repository.tag.TagRepository;
 import com.nhnacademy.minidooray.taskapi.repository.tasktag.TaskTagRepository;
 import com.nhnacademy.minidooray.taskapi.repository.project.ProjectRepository;
@@ -30,7 +31,7 @@ public class TaskService {
     private final TagRepository tagRepository;
     private final TaskTagRepository taskTagRepository;
 
-    public List<TaskDto> getProjectTasks(Integer projectSeq) {
+    public List<TaskListDto> getProjectTasks(Integer projectSeq) {
         projectRepository.findById(projectSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
@@ -47,7 +48,7 @@ public class TaskService {
         return taskRepository.getTask(projectSeq, taskSeq);
     }
 
-    public List<TaskDto> getTasks(Integer projectSeq, String projectMemberId) {
+    public List<TaskListDto> getTasks(Integer projectSeq, String projectMemberId) {
         projectRepository.findById(projectSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
