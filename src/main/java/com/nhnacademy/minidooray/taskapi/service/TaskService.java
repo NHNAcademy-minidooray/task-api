@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class TaskService {
         projectRepository.findById(projectSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
-        projectMemberRepository.getProjectMember(projectSeq,projectMemberId).orElseThrow(
+        projectMemberRepository.getProjectMember(projectSeq, projectMemberId).orElseThrow(
                 () -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
 
 
@@ -62,7 +63,7 @@ public class TaskService {
 
     @Transactional
     public TaskDto createTask(TaskRegisterRequest registerRequest, Integer projectSeq, String projectMemberId) {
-        if(!projectRepository.existsById(projectSeq)) {
+        if (!projectRepository.existsById(projectSeq)) {
             throw new NotFoundException("등록되지 않은 프로젝트입니다.");
         }
 
@@ -70,15 +71,18 @@ public class TaskService {
                 .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
                 .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
 
-        Milestone milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName())
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 마일스톤입니다."));
+        Milestone milestone = null;
+        if (Objects.nonNull(registerRequest.getMilestoneName())) {
+            milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName())
+                    .orElseThrow(() -> new NotFoundException("등록되지 않은 마일스톤입니다."));
+        }
 
         List<Tag> tags = new ArrayList<>();
-        if(registerRequest.getTagNames().size() > 0) {
-            for(String tagName : registerRequest.getTagNames()) {
-                if(!tagRepository.existsByTagName(tagName)) {
+        if (registerRequest.getTagNames().size() > 0) {
+            for (String tagName : registerRequest.getTagNames()) {
+                if (!tagRepository.existsByTagName(tagName)) {
                     throw new NotFoundException("등록되지 않은 태그입니다.");
-                }else {
+                } else {
                     tags.add(tagRepository.findByTagName(tagName).get());
                 }
             }
@@ -89,15 +93,15 @@ public class TaskService {
                 .taskTitle(registerRequest.getTitle())
                 .taskContent(registerRequest.getContent())
                 .taskCreatedAt(LocalDateTime.now())
-                .milestone(milestone)
+                .milestone(Objects.isNull(milestone) ? null : milestone)
                 .projectMember(projectMember)
                 .build();
 
         taskRepository.save(task);
 
         //TaskTag 테이블 값 등록
-        if(tags.size() > 0) {
-            for(Tag tag : tags) {
+        if (tags.size() > 0) {
+            for (Tag tag : tags) {
                 taskTagRepository.save(TaskTag.builder()
                         .pk(TaskTag.Pk.builder()
                                 .taskSeq(task.getTaskSeq())
@@ -119,29 +123,34 @@ public class TaskService {
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
         Task task = taskRepository.findById(taskSeq).orElseThrow(
-                    () -> new NotFoundException("존재하지 않는 업무입니다."));
+                () -> new NotFoundException("존재하지 않는 업무입니다."));
 
-        ProjectMember projectMember = taskRepository.findByTaskSeq(taskSeq).orElseThrow(
-                () -> new NotFoundException("잘못된 접근입니다."));
 
-        if(!projectMember.getProjectMemberId().equals(projectMemberId)) {
+        ProjectMember projectMember = taskRepository.getWriter(taskSeq);
+        if(Objects.isNull(projectMember)) {
+            throw new NotFoundException("잘못된 접근입니다.");
+        }
+
+        if (!projectMember.getProjectMemberId().equals(projectMemberId)) {
             throw new ForbiddenException("수정 접근 권한이 없습니다.");
         }
 
-
-        Milestone milestone = milestoneRepository.findByMilestoneName(modifyRequest.getMilestoneName())
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 마일스톤입니다."));
+        Milestone milestone = null;
+        if (Objects.nonNull(modifyRequest.getMilestoneName())) {
+            milestone = milestoneRepository.findByMilestoneName(modifyRequest.getMilestoneName())
+                    .orElseThrow(() -> new NotFoundException("등록되지 않은 마일스톤입니다."));
+        }
 
 
         List<Tag> tags = new ArrayList<>();
         List<TaskTag> taskTags = new ArrayList<>();
 
-        //수정 요청 -> tag entity 로 변경
-        if(modifyRequest.getTagNames().size() > 0) {
-            for(String tagName : modifyRequest.getTagNames()) {
-                if(!tagRepository.existsByTagName(tagName)) {
+        //수정 request object -> tag entity 로 변경
+        if (modifyRequest.getTagNames().size() > 0) {
+            for (String tagName : modifyRequest.getTagNames()) {
+                if (!tagRepository.existsByTagName(tagName)) {
                     throw new NotFoundException("등록되지 않은 태그입니다.");
-                }else {
+                } else {
                     tags.add(tagRepository.findByTagName(tagName).get());
                 }
             }
@@ -153,42 +162,45 @@ public class TaskService {
         taskTagRepository.deleteAll(deleteTaskTags);
 
 
-        for(Tag tag : tags) {
+        for (Tag tag : tags) {
             TaskTag taskTag = TaskTag.builder()
-                            .pk(TaskTag.Pk.builder()
-                                    .tagSeq(tag.getTagSeq())
-                                    .taskSeq(taskSeq)
-                                    .build())
-                            .task(task)
-                            .tag(tag)
-                            .build();
-
-            taskTags.add(taskTag);
+                    .pk(TaskTag.Pk.builder()
+                            .tagSeq(tag.getTagSeq())
+                            .taskSeq(taskSeq)
+                            .build())
+                    .task(task)
+                    .tag(tag)
+                    .build();
+            taskTagRepository.save(taskTag);
         }
 
-        //변경감지
-        task.update(modifyRequest.getTitle(), modifyRequest.getContent(),milestone, taskTags);
+        milestone = Objects.isNull(milestone) ? null : milestone;
 
-        return  taskRepository.getTask(projectSeq, taskSeq);
+        //변경감지
+        task.update(modifyRequest.getTitle(), modifyRequest.getContent(), milestone);
+
+        return taskRepository.getTask(projectSeq, taskSeq);
     }
 
 
     @Transactional
     public void deleteTask(Integer projectSeq, Integer taskSeq, String projectMemberId) {
 
-        if(!projectRepository.existsById(projectSeq)) {
+        if (!projectRepository.existsById(projectSeq)) {
             throw new NotFoundException("존재하지 않는 프로젝트입니다.");
         }
 
         Task task = taskRepository.findById(taskSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 업무입니다."));
 
-//        ProjectMember projectMember = taskRepository.findByTaskSeq(taskSeq).orElseThrow(
-//                () -> new NotFoundException("잘못된 접근입니다."));
+        ProjectMember projectMember = taskRepository.getWriter(taskSeq);
+        if(Objects.isNull(projectMember)) {
+            throw new NotFoundException("잘못된 접근입니다.");
+        }
 
-//        if(!projectMember.getProjectMemberId().equals(projectMemberId)) {
-//            throw new ForbiddenException("삭제 접근 권한이 없습니다.");
-//        }
+        if(!projectMember.getProjectMemberId().equals(projectMemberId)) {
+            throw new ForbiddenException("삭제 접근 권한이 없습니다.");
+        }
 
         taskRepository.delete(task);
     }

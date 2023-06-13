@@ -3,6 +3,7 @@ package com.nhnacademy.minidooray.taskapi.domain.request.task;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -15,9 +16,9 @@ public class TaskRegisterRequest {
     private String title;
     @NotBlank
     private String content;
-    @NotBlank
+    @Nullable
+    @JsonProperty("milestone")
     private String milestoneName;
-
-    @NotBlank
+    @Nullable
     private List<String> tagNames = new ArrayList<>();
 }

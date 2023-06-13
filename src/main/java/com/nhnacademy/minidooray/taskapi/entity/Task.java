@@ -51,11 +51,10 @@ public class Task {
         this.projectMember = projectMember;
     }
 
-    public void update(String taskTitle, String taskContent, Milestone milestone, List<TaskTag> taskTags) {
+    public void update(String taskTitle, String taskContent, Milestone milestone) {
         this.taskTitle = taskTitle;
         this.taskContent = taskContent;
         this.milestone = milestone;
-        this.taskTags =taskTags;
     }
 
 }

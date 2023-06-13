@@ -200,15 +200,43 @@ GET http://localhost:8080/projects/1/tasks/2
 GET http://localhost:8080/projects/1/tasks/accounts/mooneunji
 
 ### 업무 등록
-POST http://localhost:8080/projects/1/tasks/accounts/{accountId}
+POST http://localhost:8080/projects/1/tasks/accounts/mooneunji
 Content-Type: application/json
 
 {
+  "title": "test-task-create",
+  "content" : "test-test-test-task",
+  "milestone" : null,
+  "tagNames" : []
+
+}
+
+### 업무 수정
+PATCH http://localhost:8080/projects/1/tasks/5/accounts/mooneunji
+Content-Type: application/json
+
+{
+  "title": "test-task-update",
+  "content" : "test-test-test-task",
+  "milestone" : null,
+  "tagNames" : ["Api", "DB"]
+
+}
+
+### 업무 수정
+PATCH http://localhost:8080/projects/1/tasks/5/accounts/mooneunji
+Content-Type: application/json
+
+{
+  "title": "test-task-update2",
+  "content" : "test-test-test-task",
+  "milestone" : "ERD 설계",
+  "tagNames" : []
 
 }
 
 ### 해당 프로젝트의 해당 업무 삭제
-DELETE http://localhost:8080/projects/1/tasks/2/accounts/goyoungeun
+DELETE http://localhost:8080/projects/1/tasks/5/accounts/mooneunji
 
 
 # taskTags

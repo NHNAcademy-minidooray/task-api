@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.domain.request.task;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,8 @@ public class TaskModifyRequest {
     private String title;
     @NotBlank
     private String content;
-    @NotBlank
+
+    @JsonProperty("milestone")
     private String milestoneName;
     private List<String> tagNames = new ArrayList<>();
 }
