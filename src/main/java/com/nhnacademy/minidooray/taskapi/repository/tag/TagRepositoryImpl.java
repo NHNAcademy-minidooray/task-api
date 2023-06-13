@@ -1,15 +1,12 @@
 package com.nhnacademy.minidooray.taskapi.repository.tag;
 
-import com.nhnacademy.minidooray.taskapi.domain.TagDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TagDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.entity.*;
-import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TagRepositoryImpl extends QuerydslRepositorySupport implements TagRepositoryCustom {
     public TagRepositoryImpl() {
@@ -50,14 +47,14 @@ public class TagRepositoryImpl extends QuerydslRepositorySupport implements TagR
     }
 
     @Override
-    public Optional<TagDto> getTag(Integer tagSeq) {
+    public TagDto getTag(Integer tagSeq) {
         QTag tag = QTag.tag;
         QProject project = QProject.project;
         return from(tag)
                 .innerJoin(tag.project, project)
                 .where(tag.tagSeq.eq(tagSeq))
                 .select(Projections.constructor(TagDto.class, tag.tagSeq, tag.tagName, project.projectSeq))
-                .stream().findFirst();
+                .fetchOne();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.repository.project;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
 import com.nhnacademy.minidooray.taskapi.entity.QProject;
 import com.nhnacademy.minidooray.taskapi.entity.QProjectMember;
@@ -27,9 +27,10 @@ public class ProjectRepositoryImpl extends QuerydslRepositorySupport implements 
                 .innerJoin(projectMember.project, project)
                 .where(projectMember.projectMemberRole.eq("ROLE_ADMIN"))
                 .orderBy(project.projectSeq.asc())
-                .select(Projections.constructor(ProjectDto.class, project.projectSeq,
-                        project.projectTitle, projectMember.projectMemberId, projectMember.projectMemberRole,
-                        project.statusCode.statusCodeName, project.projectContent, project.projectCreatedAt))
+                .select(Projections.constructor(ProjectDto.class, project.projectSeq, project.projectTitle,
+                        project.projectContent, project.projectCreatedAt,
+                        projectMember.projectMemberId, projectMember.projectMemberRole,
+                        project.statusCode.statusCodeName))
                 .fetch();
     }
 
@@ -45,10 +46,10 @@ public class ProjectRepositoryImpl extends QuerydslRepositorySupport implements 
         return from(projectMember)
                 .innerJoin(projectMember.project, project)
                 .where(project.projectSeq.eq(projectSeq))
-                .select(Projections.constructor(ProjectDto.class, project.projectSeq,
-                        project.projectTitle,projectMember.projectMemberId, projectMember.projectMemberRole,
-                        project.statusCode.statusCodeName, project.projectContent,
-                        project.projectCreatedAt))
+                .select(Projections.constructor(ProjectDto.class, project.projectSeq, project.projectTitle,
+                        project.projectContent, project.projectCreatedAt,
+                        projectMember.projectMemberId, projectMember.projectMemberRole,
+                        project.statusCode.statusCodeName))
                 .fetch().stream().findFirst()
                 .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없습니다."));
 

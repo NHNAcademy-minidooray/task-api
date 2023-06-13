@@ -1,7 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.entity.*;
@@ -52,8 +52,9 @@ public class TaskService {
         projectRepository.findById(projectSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
-        ProjectMember projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId).orElseThrow(
+        projectMemberRepository.getProjectMember(projectSeq,projectMemberId).orElseThrow(
                 () -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+
 
         return taskRepository.getTasks(projectSeq, projectMemberId);
     }
@@ -65,7 +66,8 @@ public class TaskService {
             throw new NotFoundException("등록되지 않은 프로젝트입니다.");
         }
 
-        ProjectMember projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId)
+        ProjectMember projectMember = projectMemberRepository
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
                 .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
 
         Milestone milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName())
@@ -181,12 +183,12 @@ public class TaskService {
         Task task = taskRepository.findById(taskSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 업무입니다."));
 
-        ProjectMember projectMember = taskRepository.findByTaskSeq(taskSeq).orElseThrow(
-                () -> new NotFoundException("잘못된 접근입니다."));
+//        ProjectMember projectMember = taskRepository.findByTaskSeq(taskSeq).orElseThrow(
+//                () -> new NotFoundException("잘못된 접근입니다."));
 
-        if(!projectMember.getProjectMemberId().equals(projectMemberId)) {
-            throw new ForbiddenException("수정 접근 권한이 없습니다.");
-        }
+//        if(!projectMember.getProjectMemberId().equals(projectMemberId)) {
+//            throw new ForbiddenException("삭제 접근 권한이 없습니다.");
+//        }
 
         taskRepository.delete(task);
     }

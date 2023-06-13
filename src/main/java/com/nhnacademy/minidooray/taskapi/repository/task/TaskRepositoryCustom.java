@@ -1,8 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.repository.task;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;

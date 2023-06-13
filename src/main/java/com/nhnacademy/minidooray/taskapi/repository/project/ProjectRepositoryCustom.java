@@ -1,12 +1,9 @@
 package com.nhnacademy.minidooray.taskapi.repository.project;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import java.nio.file.LinkOption;
 import java.util.List;
-import java.util.Optional;
 
 
 @NoRepositoryBean

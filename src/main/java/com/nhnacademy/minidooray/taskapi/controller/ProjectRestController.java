@@ -1,6 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.project.ProjectModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.project.ProjectRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;

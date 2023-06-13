@@ -9,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "Projects")
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class Project {
@@ -39,4 +37,12 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = {CascadeType.REMOVE})
     private List<Tag> tags;
+
+    @Builder
+    public Project(String projectTitle, StatusCode statusCode, String projectContent, LocalDateTime projectCreatedAt) {
+        this.projectTitle = projectTitle;
+        this.statusCode = statusCode;
+        this.projectContent = projectContent;
+        this.projectCreatedAt = projectCreatedAt;
+    }
 }

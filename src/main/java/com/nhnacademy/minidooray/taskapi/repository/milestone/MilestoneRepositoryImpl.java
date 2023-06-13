@@ -1,11 +1,9 @@
 package com.nhnacademy.minidooray.taskapi.repository.milestone;
 
 
-import com.nhnacademy.minidooray.taskapi.domain.MilestoneDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.MilestoneDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.entity.*;
-import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 

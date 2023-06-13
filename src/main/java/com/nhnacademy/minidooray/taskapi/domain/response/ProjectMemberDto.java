@@ -1,5 +1,6 @@
-package com.nhnacademy.minidooray.taskapi.domain;
+package com.nhnacademy.minidooray.taskapi.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -7,12 +8,13 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 public class ProjectMemberDto {
-    @NotNull
+    @JsonProperty("id")
     private Integer projectMemberSeq;
-    @NotBlank
+
+    @JsonProperty("username")
     private String projectMemberId;
 
-    @NotBlank
+    @JsonProperty("auth")
     private String projectMemberRole;
 
     public ProjectMemberDto(Integer projectMemberSeq, String projectMemberId, String projectMemberRole) {

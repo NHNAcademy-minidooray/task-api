@@ -3,55 +3,50 @@
 GET http://localhost:8080/projects
 
 ### 해당 프로젝트 조회
-
 GET http://localhost:8080/projects/1
 
-###
 
+### 프로젝트 생성
 POST http://localhost:8080/projects/goback10000
 Content-Type: application/json
 
 {
-  "title": "test11",
-  "content" : "test-project"
+  "title": "test",
+  "content" : "test-project-create"
 }
 
-###
-
+### 프로젝트 수정
 PATCH http://localhost:8080/projects/3
 Content-Type: application/json
 
 {
   "title": "*** test ***",
-  "content" : "test-project"
+  "content" : "test-project-update"
 }
 
-###
-
+### 프로젝트 삭제
 DELETE http://localhost:8080/projects/3
 
-###
 
 
 # project-member
+### 프로젝트별 멤버 조회
 GET http://localhost:8080/projects/2/accounts
 
-###
 
-
+### 해당 프로젝트의 해당 계정 조회
 GET http://localhost:8080/projects/2/accounts/goback10000
 
 
-###
+### 해당 계정의 프로젝트 조회
 GET http://localhost:8080/projects/accounts/goback10000
 
 
-###
-POST http://localhost:8080/projects/2/accounts/goback10000
+### 프로젝트에 멤버 추가
+POST http://localhost:8080/projects/3/accounts/goback10000
 Content-Type: application/json
 
 {
-    "id" : 3,
   "members" : [
     {
       "id" :"test1"
@@ -65,12 +60,15 @@ Content-Type: application/json
   ]
 }
 
-###
+### 프로젝트별 멤버 조회 2
+GET http://localhost:8080/projects/3/accounts
+
+
+### 프로젝트에 멤버 추가
 POST http://localhost:8080/projects/2/accounts/goback10000
 Content-Type: application/json
 
 {
-  "id" : 2,
   "members" : [
     {
       "id" :"test1"
@@ -87,7 +85,7 @@ DELETE http://localhost:8080/projects/2/accounts/minidooray
 GET http://localhost:8080/projects/1/tags
 
 
-###
+### 해당 프로젝트의 해당 태그가 등록된 업무 리스트 조회
 GET http://localhost:8080/projects/1/tasks/tags/1
 
 
@@ -108,20 +106,23 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/projects/1/tags/7
+DELETE http://localhost:8080/projects/1/tags/1
 
 
-###
 # milestone
+### 해당 프로젝트의 마일스톤 조회
 GET http://localhost:8080/projects/1/milestones
 
-### 1번 마일스톤이 등록된 task 조회
+
+### 해당 마일스톤이 등록된 업무 조회
 GET http://localhost:8080/projects/1/tasks/milestones/1
 
-###
+
+### 해당 프로젝트의 해당 마일스톤 조회
 GET http://localhost:8080/projects/1/milestones/1
 
-###
+
+### 해당 프로젝트에 마일스톤 등록
 POST http://localhost:8080/projects/1/milestones
 Content-Type: application/json
 
@@ -131,7 +132,8 @@ Content-Type: application/json
   "end" : "2023-06-16"
 }
 
-###
+
+### 해당 마일스톤 수정
 PATCH http://localhost:8080/projects/1/milestones/5
 Content-Type: application/json
 
@@ -141,11 +143,74 @@ Content-Type: application/json
   "end" : "2023-06-16"
 }
 
-###
-DELETE http://localhost:8080/projects/1/milestones/1
+
+### 해당 마일스톤 삭제
+DELETE http://localhost:8080/projects/1/milestones/5
 
 
-###
+
+#comment
+### 해당 업무의 모든 댓글 조회
+GET http://localhost:8080/projects/1/tasks/4/comments
+
+
+### 해당 업무의 해당 댓글 조회
+GET http://localhost:8080/projects/1/tasks/2/comments/2
+
+
+### 해당 계정의 모든 댓글 조회
+GET http://localhost:8080/comments/goyoungeun
+
+
+### 댓글 등록
+POST http://localhost:8080/projects/1/tasks/4/comments/accounts/goyoungeun
+Content-Type: application/json
+
+{
+  "content": "comment-test-create"
+}
+
+
+### 댓글 수정
+PATCH http://localhost:8080/projects/1/tasks/4/comments/4/accounts/goyoungeun
+Content-Type: application/json
+
+{
+  "content": "comment-test-update"
+}
+
+
+### 댓글 삭제
+DELETE http://localhost:8080/projects/1/tasks/4/comments/4/accounts/goyoungeun
+
+
+
 
 # task
 
+### 해당 프로젝트 전체 업무 조회
+GET http://localhost:8080/projects/1/tasks
+
+
+### 해당 프로젝트 해당 업무 조회
+GET http://localhost:8080/projects/1/tasks/2
+
+
+### 해당 프로젝트의 해당 작성자가 작성한 업무 리스트 조회
+GET http://localhost:8080/projects/1/tasks/accounts/mooneunji
+
+### 업무 등록
+POST http://localhost:8080/projects/1/tasks/accounts/{accountId}
+Content-Type: application/json
+
+{
+
+}
+
+### 해당 프로젝트의 해당 업무 삭제
+DELETE http://localhost:8080/projects/1/tasks/2/accounts/goyoungeun
+
+
+# taskTags
+###
+GET http://localhost:8080/tasktags/3

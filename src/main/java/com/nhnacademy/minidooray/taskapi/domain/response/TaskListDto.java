@@ -1,4 +1,4 @@
-package com.nhnacademy.minidooray.taskapi.domain;
+package com.nhnacademy.minidooray.taskapi.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -10,10 +10,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @JsonRootName("task")
 public class TaskListDto {
-    @NotNull
     @JsonProperty("id")
     private Integer taskSeq;
-    @NotBlank
     @JsonProperty("title")
     private String taskTitle;
 

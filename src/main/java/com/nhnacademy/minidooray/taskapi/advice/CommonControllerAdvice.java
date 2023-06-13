@@ -1,6 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.advice;
 
-import com.nhnacademy.minidooray.taskapi.domain.Error;
+import com.nhnacademy.minidooray.taskapi.domain.response.Error;
 import com.nhnacademy.minidooray.taskapi.exception.ForbiddenException;
 import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import org.springframework.http.HttpStatus;

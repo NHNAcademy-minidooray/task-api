@@ -1,8 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
-import com.nhnacademy.minidooray.taskapi.domain.MilestoneDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.MilestoneDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.milestone.MilestoneModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.milestone.MilestoneRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.entity.Milestone;

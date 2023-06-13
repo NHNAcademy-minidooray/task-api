@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS ProjectMembers
 CREATE TABLE IF NOT EXISTS Tasks
 (
     `task_seq`           INT         NOT NULL AUTO_INCREMENT,
-    `project_member_seq` VARCHAR(20) NOT NULL,
+    `project_member_seq` INT NOT NULL,
     `task_title`         VARCHAR(45) NOT NULL,
     `task_content`       TEXT        NOT NULL,
     `task_deadline`      DATETIME    NULL DEFAULT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS TaskTags
     CONSTRAINT `fk_TaskTag_Tag`
         FOREIGN KEY (`tag_seq`)
             REFERENCES Tags (`tag_seq`)
-             on delete cascade ,
+            on delete cascade ,
     CONSTRAINT `fk_TaskTag_Task1`
         FOREIGN KEY (`task_seq`)
             REFERENCES Tasks (`task_seq`)
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS Comments
     `comment_seq`        INT  NOT NULL AUTO_INCREMENT,
     `task_seq`           INT  NOT NULL,
     `comment_content`    TEXT NOT NULL,
-    `project_member_seq` VARCHAR(20) NOT NULL,
+    `project_member_seq` INT NOT NULL,
     PRIMARY KEY (`comment_seq`),
     CONSTRAINT `FK_Task_TO_Comment_1`
         FOREIGN KEY (`task_seq`)
@@ -121,6 +121,7 @@ CREATE TABLE IF NOT EXISTS Comments
         FOREIGN KEY (`project_member_seq`)
             REFERENCES ProjectMembers (`project_member_seq`)
 );
+
 
 
 
@@ -178,9 +179,11 @@ merge into Tasks values (4,4,'Account-api','// 회원리스트 조회 GET /accou
 -- task-tag data insert
 merge into TaskTags values (6,1);
 merge into TaskTags values (2,1);
+merge into TaskTags values (5,1);
 merge into TaskTags values (5,2);
 merge into TaskTags values (1,3);
 merge into TaskTags values (1,4);
+
 
 
 -- comment data insert

@@ -1,4 +1,4 @@
-package com.nhnacademy.minidooray.taskapi.domain;
+package com.nhnacademy.minidooray.taskapi.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -9,11 +9,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @JsonRootName("task-tag")
 public class TaskTagDto {
-    @NotNull
     @JsonProperty("task-id")
     private Integer taskSeq;
 
-    @NotNull
     @JsonProperty("tag-id")
     private Integer tagSeq;
 

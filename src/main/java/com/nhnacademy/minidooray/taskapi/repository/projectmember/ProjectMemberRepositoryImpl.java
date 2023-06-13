@@ -1,15 +1,17 @@
 package com.nhnacademy.minidooray.taskapi.repository.projectmember;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
-import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
+import com.nhnacademy.minidooray.taskapi.domain.request.projectmember.Member;
+import com.nhnacademy.minidooray.taskapi.domain.response.MemberListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.entity.ProjectMember;
 import com.nhnacademy.minidooray.taskapi.entity.QProject;
 import com.nhnacademy.minidooray.taskapi.entity.QProjectMember;
-import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProjectMemberRepositoryImpl extends QuerydslRepositorySupport implements ProjectMemberRepositoryCustom {
     public ProjectMemberRepositoryImpl() {
@@ -30,7 +32,7 @@ public class ProjectMemberRepositoryImpl extends QuerydslRepositorySupport imple
     }
 
     @Override
-    public ProjectMemberDto getProjectMember(Integer projectSeq, String projectMemberId) {
+    public Optional<ProjectMemberDto> getProjectMember(Integer projectSeq, String projectMemberId) {
         QProject project = QProject.project;
         QProjectMember projectMember = QProjectMember.projectMember;
 
@@ -40,8 +42,7 @@ public class ProjectMemberRepositoryImpl extends QuerydslRepositorySupport imple
                 .where(projectMember.projectMemberId.eq(projectMemberId))
                 .select(Projections.constructor(ProjectMemberDto.class, projectMember.projectMemberSeq,
                         projectMember.projectMemberId, projectMember.projectMemberRole))
-                .fetch().stream().findFirst()
-                .orElseThrow(() -> new NotFoundException("프로젝트 멤버를 찾을 수 없습니다."));
+                .fetch().stream().findFirst();
     }
 
     @Override
@@ -53,8 +54,27 @@ public class ProjectMemberRepositoryImpl extends QuerydslRepositorySupport imple
                 .innerJoin(projectMember.project, project)
                 .where(projectMember.projectMemberId.eq(projectMemberId))
                 .select(Projections.constructor(ProjectDto.class, project.projectSeq, project.projectTitle,
+                        project.projectContent, project.projectCreatedAt,
                         projectMember.projectMemberId, projectMember.projectMemberRole,
-                        project.statusCode.statusCodeName, project.projectContent, project.projectCreatedAt))
+                        project.statusCode.statusCodeName))
                 .fetch();
+    }
+
+    @Override
+    public List<ProjectMember> findByProjectMemberId(String projectMemberId) {
+        QProjectMember projectMember = QProjectMember.projectMember;
+        return from(projectMember)
+                .where(projectMember.projectMemberId.eq(projectMemberId))
+                .select(projectMember)
+                .fetch();
+    }
+
+    @Override
+    public MemberListDto getProjectMember(Integer projectMemberSeq) {
+        QProjectMember projectMember = QProjectMember.projectMember;
+        return from(projectMember)
+                .where(projectMember.projectMemberSeq.eq(projectMemberSeq))
+                .select(Projections.constructor(MemberListDto.class, projectMember.projectMemberSeq))
+                .fetchOne();
     }
 }

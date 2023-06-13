@@ -1,7 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;

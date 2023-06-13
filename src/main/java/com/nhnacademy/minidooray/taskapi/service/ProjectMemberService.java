@@ -1,7 +1,8 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
-import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.MemberListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.projectmember.Member;
 import com.nhnacademy.minidooray.taskapi.domain.request.projectmember.ProjectMemberRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.entity.ProjectMember;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,10 +49,11 @@ public class ProjectMemberService {
         projectRepository.findById(projectSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
-        ProjectMember projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId).orElseThrow(
+        ProjectMember projectMember = projectMemberRepository
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq).orElseThrow(
                 () -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
 
-        return projectMemberRepository.getProjectMember(projectSeq, projectMemberId);
+        return projectMemberRepository.getProjectMember(projectSeq, projectMemberId).get();
     }
 
     /**
@@ -59,8 +62,10 @@ public class ProjectMemberService {
      * @return
      */
     public List<ProjectDto> getProjects(String projectMemberId) {
-        ProjectMember projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId).orElseThrow(
-                () -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+        List<ProjectMember> projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId);
+        if(projectMember.size() == 0) {
+            throw new NotFoundException("해당 멤버를 찾을 수 없습니다.");
+        }
 
         return projectMemberRepository.getProjects(projectMemberId);
     }
@@ -75,18 +80,20 @@ public class ProjectMemberService {
      * @return 생성된 프로젝트 멤버 객체
      */
     @Transactional
-    public ProjectMemberDto createProjectMember(ProjectMemberRegisterRequest registerRequest,
+    public List<MemberListDto> createProjectMember(ProjectMemberRegisterRequest registerRequest,
                                                 Integer projectSeq, String accountId) {
+
+        projectRepository.findById(projectSeq).orElseThrow(
+                () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
+
         if(!projectMemberRepository.findByProject_ProjectSeqAndProjectMemberRole(projectSeq,"ROLE_ADMIN")
-                .equals(projectMemberRepository.findByProjectMemberId(accountId))) {
-            throw new ForbiddenException("프로젝트 등록 권한이 없습니다.");
+                .getProjectMemberId().equals(accountId)) {
+            throw new ForbiddenException("프로젝트 멤버 등록 권한이 없습니다.");
         }
 
-        if (!projectRepository.existsById(registerRequest.getProjectSeq())) {
-            throw new NotFoundException("존재하지 않는 프로젝트에 등록할 수 없습니다.");
-        }
 
         ProjectMember projectMember = null;
+        List<MemberListDto> results = new ArrayList<>();
         for(Member member : registerRequest.getProjectMemberIds()) {
             projectMember = ProjectMember.builder()
                                         .projectMemberId(member.getProjectMemberId())
@@ -95,15 +102,15 @@ public class ProjectMemberService {
                                         .build();
 
             projectMemberRepository.save(projectMember);
+            results.add(projectMemberRepository.getProjectMember(projectMember.getProjectMemberSeq()));
         }
 
 
-        return projectMemberRepository.getProjectMember(projectSeq, projectMember.getProjectMemberId());
+        return results;
     }
 
     /**
      * 프로젝트 멤버 삭제
-     *
      * @param projectSeq      해당 프로젝트 번호
      * @param projectMemberId 해당 프로젝트의 멤버 아이디
      */
@@ -112,8 +119,9 @@ public class ProjectMemberService {
         projectRepository.findById(projectSeq).orElseThrow(
                 () -> new NotFoundException("존재하지 않는 프로젝트를 삭제할 수 없습니다."));
 
-        ProjectMember projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId).orElseThrow(
-                () -> new NotFoundException("존재하지 않는 프로젝트 멤버입니다."));
+        ProjectMember projectMember = projectMemberRepository
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
+                .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
 
         projectMemberRepository.deleteById(projectMember.getProjectMemberSeq());
     }

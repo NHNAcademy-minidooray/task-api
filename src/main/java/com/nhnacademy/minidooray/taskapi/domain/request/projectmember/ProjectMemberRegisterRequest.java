@@ -10,8 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ProjectMemberRegisterRequest {
-    @JsonProperty("id")
-    private Integer projectSeq;
     @JsonProperty("members")
     private List<Member> projectMemberIds = new ArrayList<>();
 }

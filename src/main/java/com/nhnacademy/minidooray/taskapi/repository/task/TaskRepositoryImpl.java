@@ -1,13 +1,15 @@
 package com.nhnacademy.minidooray.taskapi.repository.task;
 
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.entity.*;
-import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+
+import static com.querydsl.core.types.Projections.list;
 
 public class TaskRepositoryImpl extends QuerydslRepositorySupport implements TaskRepositoryCustom {
 
@@ -17,6 +19,7 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
 
     /**
      * 해당 프로젝트의 업무 리스트
+     *
      * @param projectSeq
      * @return
      */
@@ -29,6 +32,7 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
         return from(task)
                 .innerJoin(task.projectMember, projectMember)
                 .where(projectMember.project.projectSeq.eq(projectSeq))
+                .orderBy(task.taskSeq.desc())
                 .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
                 .fetch();
     }
@@ -43,22 +47,27 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
 
         return from(task)
                 .innerJoin(task.projectMember, projectMember)
-                .innerJoin(task.milestone, milestone)
-                .innerJoin(taskTag)
+                .leftJoin(task.milestone, milestone)
+                .leftJoin(taskTag)
                 .on(task.taskSeq.eq(taskTag.task.taskSeq))
-                .innerJoin(tag)
+                .leftJoin(tag)
                 .on(taskTag.tag.tagSeq.eq(tag.tagSeq))
-                .where(projectMember.project.projectSeq.eq(projectSeq))
-                .where(task.taskSeq.eq(taskSeq))
-                .select(Projections.constructor(TaskDto.class, task.taskSeq, task.taskTitle, task.taskContent,
-                        task.taskCreatedAt, projectMember.projectMemberId, projectMember.projectMemberRole,
-                        milestone.milestoneName, Projections.list(taskTag)))
-                .fetch().stream().findFirst()
-                .orElseThrow(() -> new NotFoundException("해당 업무는 찾을 수 없습니다."));
+                .where(task.projectMember.project.projectSeq.eq(projectSeq)
+                        .and(task.taskSeq.eq(taskSeq)))
+                .distinct()
+                .transform(
+                        GroupBy.groupBy(task.taskSeq).list(
+                                Projections.constructor(TaskDto.class,
+                                        task.taskSeq, task.taskTitle, task.taskContent, task.taskCreatedAt,
+
+                                        projectMember.projectMemberId, projectMember.projectMemberRole,
+                                        milestone.milestoneName, GroupBy.list(tag.tagName)))
+                ).get(0);
     }
 
     /**
-     * 해당 작성자가 작성한 업무 리스트
+     * 해당 작성자가 작성한 업무 리스트2
+     *
      * @param projectSeq
      * @param projectMemberId
      * @return
@@ -70,8 +79,10 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
 
         return from(task)
                 .innerJoin(task.projectMember, projectMember)
-                .where(projectMember.project.projectSeq.eq(projectSeq))
-                .where(projectMember.projectMemberId.eq(projectMemberId))
+                .where(task.projectMember.project.projectSeq.eq(projectSeq))
+                .where(task.projectMember.projectMemberId.eq(projectMemberId))
+                .distinct()
+                .orderBy(task.taskSeq.desc())
                 .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
                 .fetch();
     }

@@ -1,14 +1,14 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
-import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
-import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.MemberListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.projectmember.ProjectMemberRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.ProjectMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,10 +42,10 @@ public class ProjectMemberRestController {
     }
 
     @PostMapping("/projects/{projectId}/accounts/{accountId}")
-    public ResponseEntity<ProjectMemberDto> createProjectMember(@Valid @RequestBody ProjectMemberRegisterRequest registerRequest,
-                                                                BindingResult bindingResult,
-                                                                @PathVariable Integer projectId,
-                                                                @PathVariable String accountId) {
+    public ResponseEntity<List<MemberListDto>> createProjectMember(@Valid @RequestBody ProjectMemberRegisterRequest registerRequest,
+                                                                   BindingResult bindingResult,
+                                                                   @PathVariable Integer projectId,
+                                                                   @PathVariable String accountId) {
         if(bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }

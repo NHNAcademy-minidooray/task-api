@@ -4,18 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 public class TaskRegisterRequest {
-
+    @NotBlank
     private String title;
+    @NotBlank
     private String content;
-    @JsonProperty("milestone_name")
+    @NotBlank
     private String milestoneName;
 
-    @JsonProperty("tag_names")
+    @NotBlank
     private List<String> tagNames = new ArrayList<>();
 }

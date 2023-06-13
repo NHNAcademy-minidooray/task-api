@@ -1,13 +1,11 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
-import com.nhnacademy.minidooray.taskapi.domain.TagDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskDto;
-import com.nhnacademy.minidooray.taskapi.domain.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TagDto;
+import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.tag.TagModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.tag.TagRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.TagService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

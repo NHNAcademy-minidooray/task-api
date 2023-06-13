@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,11 +18,13 @@ public class TaskTag {
     @EmbeddedId
     private  Pk pk;
 
+    @JsonIgnore
     @JoinColumn(name = "tag_seq")
     @MapsId("tagSeq")
     @ManyToOne
     private Tag tag;
 
+    @JsonIgnore
     @JoinColumn(name = "task_seq")
     @MapsId("taskSeq")
     @ManyToOne

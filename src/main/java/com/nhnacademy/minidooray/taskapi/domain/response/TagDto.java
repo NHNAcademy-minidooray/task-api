@@ -1,4 +1,4 @@
-package com.nhnacademy.minidooray.taskapi.domain;
+package com.nhnacademy.minidooray.taskapi.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
