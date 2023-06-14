@@ -60,6 +60,11 @@ public class TaskService {
         return taskRepository.getTasks(projectSeq, projectMemberId);
     }
 
+    public List<TaskListDto> getTaskAll(String projectMemberId) {
+        List<TaskListDto> taskList = taskRepository.getTaskAll(projectMemberId);
+        return taskList;
+    }
+
 
     @Transactional
     public TaskDto createTask(TaskRegisterRequest registerRequest, Integer projectSeq, String projectMemberId) {

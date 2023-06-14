@@ -16,4 +16,6 @@ public interface TaskRepositoryCustom {
     List<TaskListDto> getTasks(Integer projectSeq, String projectMemberId);
 
     ProjectMember getWriter(Integer taskSeq);
+
+    List<TaskListDto> getTaskAll(String projectMemberId);
 }

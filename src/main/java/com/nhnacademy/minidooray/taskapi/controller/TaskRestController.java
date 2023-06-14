@@ -6,6 +6,7 @@ import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.TaskService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,11 @@ public class TaskRestController {
     @GetMapping("/projects/{projectId}/tasks/accounts/{accountId}")
     public ResponseEntity<List<TaskListDto>> getTasks(@PathVariable Integer projectId, @PathVariable String accountId) {
         return ResponseEntity.ok(taskService.getTasks(projectId, accountId));
+    }
+
+    @GetMapping("/projects/tasks/{accountId}")
+    public ResponseEntity<List<TaskListDto>> getTaskAll(@PathVariable String accountId) {
+        return ResponseEntity.ok(taskService.getTaskAll(accountId));
     }
 
 
