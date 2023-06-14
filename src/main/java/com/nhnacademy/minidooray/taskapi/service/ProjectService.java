@@ -83,10 +83,7 @@ public class ProjectService {
     public ProjectDto modifyProject(ProjectModifyRequest modifyRequest, Integer projectSeq) {
         Project project = projectRepository.findById(projectSeq).orElseThrow(() -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
-        project.setProjectContent(modifyRequest.getProjectContent());
-        project.setProjectTitle(modifyRequest.getProjectTitle());
-
-        projectRepository.saveAndFlush(project);
+        project.update(modifyRequest.getProjectTitle(), modifyRequest.getProjectContent());
 
         return projectRepository.findByProjectSeq(projectSeq);
     }

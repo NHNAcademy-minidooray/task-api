@@ -3,7 +3,6 @@ package com.nhnacademy.minidooray.taskapi.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,5 +43,10 @@ public class Project {
         this.statusCode = statusCode;
         this.projectContent = projectContent;
         this.projectCreatedAt = projectCreatedAt;
+    }
+
+    public void update(String title, String content) {
+        projectTitle = title;
+        projectContent = content;
     }
 }

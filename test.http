@@ -39,7 +39,7 @@ GET http://localhost:8080/projects/2/accounts/goback10000
 
 
 ### 해당 계정의 프로젝트 조회
-GET http://localhost:8080/projects/accounts/goback10000
+GET http://localhost:8080/projects/accounts/goyoungeun
 
 
 ### 프로젝트에 멤버 추가

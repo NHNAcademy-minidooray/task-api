@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer>, CommentRepositoryCustom {
     Optional<Comment> findByCommentSeqAndTask_TaskSeq(Integer commentSeq, Integer taskSeq);
+
 }
