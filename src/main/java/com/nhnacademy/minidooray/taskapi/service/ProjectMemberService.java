@@ -62,9 +62,10 @@ public class ProjectMemberService {
      * @return
      */
     public List<ProjectDto> getProjects(String projectMemberId) {
+        List<ProjectDto> projects = new ArrayList<>();
         List<ProjectMember> projectMember = projectMemberRepository.findByProjectMemberId(projectMemberId);
         if(projectMember.size() == 0) {
-            throw new NotFoundException("해당 멤버를 찾을 수 없습니다.");
+            return projects;
         }
 
         return projectMemberRepository.getProjects(projectMemberId);
