@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
+import com.nhnacademy.minidooray.taskapi.domain.response.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.domain.response.TaskDto;
 import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
@@ -61,7 +62,13 @@ public class TaskService {
     }
 
     public List<TaskListDto> getTaskAll(String projectMemberId) {
-        List<TaskListDto> taskList = taskRepository.getTaskAll(projectMemberId);
+        List<ProjectMember> projectMembers = projectMemberRepository.findByProjectMemberId(projectMemberId);
+        List<TaskListDto> taskList = new ArrayList<>();
+
+        for (ProjectMember member : projectMembers) {
+            taskList.addAll(taskRepository.getProjectTasks(member.getProject().getProjectSeq()));
+        }
+
         return taskList;
     }
 
@@ -155,8 +162,6 @@ public class TaskService {
 
 
         List<Tag> tags = new ArrayList<>();
-        List<TaskTag> taskTags = new ArrayList<>();
-
         //수정 request object -> tag entity 로 변경
         if (modifyRequest.getTagNames().size() > 0) {
             for (String tagName : modifyRequest.getTagNames()) {
