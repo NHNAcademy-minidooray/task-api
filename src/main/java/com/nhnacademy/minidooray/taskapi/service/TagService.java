@@ -41,9 +41,7 @@ public class TagService {
 
         return tagRepository.getTasks(projectSeq, tagSeq);
     }
-
-
-    //todo 보류
+    
     public TagDto getTag(Integer projectSeq, Integer tagSeq) {
         if (!projectRepository.existsById(projectSeq)) {
             throw new NotFoundException("등록되지 않은 프로젝트입니다.");

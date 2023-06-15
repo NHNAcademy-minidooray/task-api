@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -50,8 +51,11 @@ public class ProjectMemberService {
                 () -> new NotFoundException("존재하지 않는 프로젝트입니다."));
 
         ProjectMember projectMember = projectMemberRepository
-                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq).orElseThrow(
-                () -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq);
+
+        if(Objects.isNull(projectMember)) {
+            throw new ForbiddenException("등록되지 않은 멤버입니다.");
+        }
 
         return projectMemberRepository.getProjectMember(projectSeq, projectMemberId).get();
     }
@@ -121,9 +125,18 @@ public class ProjectMemberService {
                 () -> new NotFoundException("존재하지 않는 프로젝트를 삭제할 수 없습니다."));
 
         ProjectMember projectMember = projectMemberRepository
-                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq);
 
-        projectMemberRepository.deleteById(projectMember.getProjectMemberSeq());
+        if(Objects.isNull(projectMember)) {
+            throw new ForbiddenException("등록되지 않은 멤버입니다.");
+        }
+
+        if(projectMember.getProjectMemberRole().equals("ROLE_ADMIN")) {
+            projectMemberRepository.deleteById(projectMember.getProjectMemberSeq());
+            projectRepository.deleteById(projectMember.getProject().getProjectSeq());
+        } else {
+            projectMemberRepository.deleteById(projectMember.getProjectMemberSeq());
+        }
+
     }
 }

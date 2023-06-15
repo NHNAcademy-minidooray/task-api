@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class CommonControllerAdvice {
     public ResponseEntity<Error> notFound(HttpClientErrorException.NotFound e, HttpServletRequest req) {
         Error error = Error.builder()
                 .timeStamp(LocalDateTime.now())
-                .status(404)
+                .status(e.getRawStatusCode())
                 .error(e.getMessage())
                 .path(req.getRequestURI())
                 .build();
@@ -46,7 +47,7 @@ public class CommonControllerAdvice {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<Error> forbidden(NotFoundException e, HttpServletRequest req) {
+    public ResponseEntity<Error> forbidden(ForbiddenException e, HttpServletRequest req) {
         Error error = Error.builder()
                 .timeStamp(LocalDateTime.now())
                 .status(403)
@@ -61,12 +62,24 @@ public class CommonControllerAdvice {
     public ResponseEntity<Error> baseForbidden(HttpClientErrorException.Forbidden e, HttpServletRequest req) {
         Error error = Error.builder()
                 .timeStamp(LocalDateTime.now())
-                .status(403)
+                .status(e.getRawStatusCode())
                 .error(e.getMessage())
                 .path(req.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
+    public ResponseEntity<Error> internalError(HttpServerErrorException.InternalServerError e, HttpServletRequest req) {
+        Error error = Error.builder()
+                .timeStamp(LocalDateTime.now())
+                .status(e.getRawStatusCode())
+                .error(e.getMessage())
+                .path(req.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
 

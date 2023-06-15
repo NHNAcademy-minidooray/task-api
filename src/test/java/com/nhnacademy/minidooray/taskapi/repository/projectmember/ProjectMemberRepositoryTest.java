@@ -65,7 +65,7 @@ class ProjectMemberRepositoryTest {
 
         ProjectMember actual = projectMemberRepository
                 .findByProjectMemberIdAndProject_ProjectSeq(projectMember.getProjectMemberId(),
-                                                            project.getProjectSeq()).get();
+                                                            project.getProjectSeq());
 
         assertThat(actual.getProjectMemberId()).isEqualTo("test");
     }

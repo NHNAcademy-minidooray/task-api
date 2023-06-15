@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProjectService {
-    //todo 예외처리 custom 마무리
     private final ProjectRepository projectRepository;
     private final StatusCodeRepository statusCodeRepository;
     private final ProjectMemberRepository projectMemberRepository;

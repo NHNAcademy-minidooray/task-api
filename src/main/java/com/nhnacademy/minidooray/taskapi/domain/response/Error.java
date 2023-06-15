@@ -9,13 +9,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 
-/**
- *   "timestamp": "2023-06-06T12:08:38.929+00:00",
- *   "status": 500,
- *   "error": "Internal Server Error",
- *   "path": "/projects/3"
- */
-
 @Builder
 @Getter
 @NoArgsConstructor

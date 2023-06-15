@@ -3,7 +3,7 @@
 GET http://localhost:8080/projects
 
 ### 해당 프로젝트 조회
-GET http://localhost:8080/projects/1
+GET http://localhost:8080/projects/3
 
 
 ### 프로젝트 생성
@@ -35,11 +35,11 @@ GET http://localhost:8080/projects/2/accounts
 
 
 ### 해당 프로젝트의 해당 계정 조회
-GET http://localhost:8080/projects/2/accounts/goback10000
+GET http://localhost:8080/projects/3/accounts/goback10000
 
 
 ### 해당 계정의 프로젝트 조회
-GET http://localhost:8080/projects/accounts/goyoungeun
+GET http://localhost:8080/projects/accounts/goback10000
 
 
 ### 프로젝트에 멤버 추가
@@ -76,12 +76,12 @@ Content-Type: application/json
   ]
 }
 
-###
-DELETE http://localhost:8080/projects/2/accounts/minidooray
+### 해당 계정 삭제
+DELETE http://localhost:8080/projects/3/accounts/goback10000
 
-###
 
 # tag
+### 해당 프로젝트의 모든 태그 조회
 GET http://localhost:8080/projects/1/tags
 
 
@@ -89,7 +89,7 @@ GET http://localhost:8080/projects/1/tags
 GET http://localhost:8080/projects/1/tasks/tags/1
 
 
-###
+### 해당 프로젝트에 태그 등록
 POST http://localhost:8080/projects/1/tags
 Content-Type: application/json
 
@@ -97,7 +97,7 @@ Content-Type: application/json
   "name" : "tag-test-create"
 }
 
-###
+### 해당 태그 수정
 PATCH http://localhost:8080/projects/1/tags/7
 Content-Type: application/json
 
@@ -105,8 +105,8 @@ Content-Type: application/json
   "name" : "tag-test-update"
 }
 
-###
-DELETE http://localhost:8080/projects/1/tags/1
+### 태그 삭제
+DELETE http://localhost:8080/projects/1/tags/7
 
 
 # milestone
@@ -216,7 +216,19 @@ Content-Type: application/json
 
 }
 
-### 업무 수정
+### 프로젝트 멤버가 아닌 경우 업무 등록
+POST http://localhost:8080/projects/1/tasks/accounts/test1
+Content-Type: application/json
+
+{
+  "title": "error-title",
+  "content" : "content",
+  "milestone" : null,
+  "tagNames" : []
+
+}
+
+### 업무 수정 - 태그 추가
 PATCH http://localhost:8080/projects/1/tasks/5/accounts/mooneunji
 Content-Type: application/json
 
@@ -228,7 +240,7 @@ Content-Type: application/json
 
 }
 
-### 업무 수정
+### 업무 수정 - 태그 수정 및 마일스톤 추가
 PATCH http://localhost:8080/projects/1/tasks/5/accounts/mooneunji
 Content-Type: application/json
 
@@ -236,7 +248,7 @@ Content-Type: application/json
   "title": "test-task-update2",
   "content" : "test-test-test-task",
   "milestone" : "ERD 설계",
-  "tagNames" : []
+  "tagNames" : ["DB", "Thymeleaf"]
 
 }
 

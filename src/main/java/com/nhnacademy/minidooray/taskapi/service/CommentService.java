@@ -8,6 +8,7 @@ import com.nhnacademy.minidooray.taskapi.entity.Comment;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
 import com.nhnacademy.minidooray.taskapi.entity.ProjectMember;
 import com.nhnacademy.minidooray.taskapi.entity.Task;
+import com.nhnacademy.minidooray.taskapi.exception.ForbiddenException;
 import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
 import com.nhnacademy.minidooray.taskapi.repository.comment.CommentRepository;
 import com.nhnacademy.minidooray.taskapi.repository.projectmember.ProjectMemberRepository;
@@ -59,8 +60,11 @@ public class CommentService {
     @Transactional
     public CommentDto createComment(CommentRegisterRequest request, Integer projectSeq, Integer taskSeq, String projectMemberId) {
         ProjectMember projectMember = projectMemberRepository
-                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq);
+
+        if(Objects.isNull(projectMember)) {
+            throw new ForbiddenException("댓글 등록 권한이 없습니다.");
+        }
 
         Task task = taskRepository.findByTaskSeqAndProjectMember_Project_ProjectSeq(taskSeq, projectSeq)
                 .orElseThrow(() -> new NotFoundException("해당 업무를 찾지 못했습니다."));
@@ -80,8 +84,11 @@ public class CommentService {
     public CommentDto updateComment(CommentModifyRequest request, Integer projectSeq, Integer taskSeq, Integer commentSeq,
                                     String projectMemberId) {
         ProjectMember projectMember = projectMemberRepository
-                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq);
+
+        if(Objects.isNull(projectMember)) {
+            throw new ForbiddenException("댓글 수정 권한이 없습니다.");
+        }
 
         Task task = taskRepository.findByTaskSeqAndProjectMember_Project_ProjectSeq(taskSeq, projectSeq)
                 .orElseThrow(() -> new NotFoundException("해당 업무를 찾지 못했습니다."));
@@ -97,8 +104,11 @@ public class CommentService {
     @Transactional
     public void deleteComment(Integer projectSeq, Integer taskSeq, Integer commentSeq, String projectMemberId) {
         ProjectMember projectMember = projectMemberRepository
-                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq);
+
+        if(Objects.isNull(projectMember)) {
+            throw new ForbiddenException("댓글 삭제 권한이 없습니다.");
+        }
 
         Task task = taskRepository.findByTaskSeqAndProjectMember_Project_ProjectSeq(taskSeq, projectSeq)
                 .orElseThrow(() -> new NotFoundException("해당 업무를 찾지 못했습니다."));

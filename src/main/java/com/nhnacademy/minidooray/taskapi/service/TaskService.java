@@ -73,13 +73,20 @@ public class TaskService {
         }
 
         ProjectMember projectMember = projectMemberRepository
-                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq)
-                .orElseThrow(() -> new NotFoundException("등록되지 않은 프로젝트 멤버입니다."));
+                .findByProjectMemberIdAndProject_ProjectSeq(projectMemberId, projectSeq);
+
+        if(Objects.isNull(projectMember)) {
+            throw new ForbiddenException("등록권한이 없습니다.");
+        }
+
 
         Milestone milestone = null;
         if (Objects.nonNull(registerRequest.getMilestoneName())) {
-            milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName())
-                    .orElseThrow(() -> new NotFoundException("등록되지 않은 마일스톤입니다."));
+            milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName()).get();
+
+            if(Objects.isNull(milestone)) {
+                throw  new NotFoundException("등록되지 않은 마일스톤입니다.");
+            }
         }
 
         List<Tag> tags = new ArrayList<>();
@@ -133,7 +140,7 @@ public class TaskService {
 
         ProjectMember projectMember = taskRepository.getWriter(taskSeq);
         if(Objects.isNull(projectMember)) {
-            throw new NotFoundException("잘못된 접근입니다.");
+            throw new BadRequestException("잘못된 요청입니다.");
         }
 
         if (!projectMember.getProjectMemberId().equals(projectMemberId)) {
@@ -200,7 +207,7 @@ public class TaskService {
 
         ProjectMember projectMember = taskRepository.getWriter(taskSeq);
         if(Objects.isNull(projectMember)) {
-            throw new NotFoundException("잘못된 접근입니다.");
+            throw new BadRequestException("잘못된 요청입니다.");
         }
 
         if(!projectMember.getProjectMemberId().equals(projectMemberId)) {
