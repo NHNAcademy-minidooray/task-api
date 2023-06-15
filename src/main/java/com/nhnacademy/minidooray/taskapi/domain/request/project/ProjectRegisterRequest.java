@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ProjectRegisterRequest {
-    @NotBlank
+    @NotBlank(message = "title : 필수 입력값 입니다.")
     @JsonProperty("title")
     private String projectTitle;
 
-    @NotBlank
+    @NotBlank(message = "content : 필수 입력값 입니다.")
     @JsonProperty("content")
     private String projectContent;
 }

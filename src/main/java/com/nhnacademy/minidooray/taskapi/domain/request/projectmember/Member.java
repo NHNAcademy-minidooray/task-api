@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class Member {
-    @NotBlank
+    @NotBlank(message = "id : 필수 입력값 입니다.")
     @JsonProperty("id")
     private String projectMemberId;
 }

@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class MilestoneModifyRequest {
-    @NotBlank
+    @NotBlank(message = "name : 필수 입력값 입니다.")
     private String name;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull
     private LocalDate start;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull
     private LocalDate end;
 }

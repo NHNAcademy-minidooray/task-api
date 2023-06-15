@@ -11,14 +11,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class MilestoneRegisterRequest {
-    @NotBlank
+    @NotBlank(message = "name : 필수 입력값 입니다.")
     private String name;
 
-    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate start;
 
-    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate end;
 }

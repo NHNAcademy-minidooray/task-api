@@ -8,6 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class TagModifyRequest {
-    @NotBlank
+    @NotBlank(message = "name : 필수 입력값 입니다.")
     private String name;
 }

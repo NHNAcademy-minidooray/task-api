@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class TaskModifyRequest {
-    @NotBlank
+    @NotBlank(message = "title : 필수 입력값 입니다.")
     private String title;
-    @NotBlank
+    @NotBlank(message = "content : 필수 입력값 입니다.")
     private String content;
 
     @JsonProperty("milestone")

@@ -9,6 +9,6 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class CommentRegisterRequest {
 
-    @NotBlank
+    @NotBlank(message = "content : 필수 입력값 입니다.")
     private String content;
 }

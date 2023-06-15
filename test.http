@@ -216,6 +216,19 @@ Content-Type: application/json
 
 }
 
+### not blank 유효성 체크, 업무 등록
+POST http://localhost:8080/projects/1/tasks/accounts/mooneunji
+Content-Type: application/json
+
+{
+  "title": "",
+  "content" : null,
+  "milestone" : null,
+  "tagNames" : []
+
+}
+
+
 ### 프로젝트 멤버가 아닌 경우 업무 등록
 POST http://localhost:8080/projects/1/tasks/accounts/test1
 Content-Type: application/json

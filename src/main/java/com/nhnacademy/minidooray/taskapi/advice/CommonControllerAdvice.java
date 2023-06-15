@@ -3,6 +3,7 @@ package com.nhnacademy.minidooray.taskapi.advice;
 import com.nhnacademy.minidooray.taskapi.domain.response.Error;
 import com.nhnacademy.minidooray.taskapi.exception.ForbiddenException;
 import com.nhnacademy.minidooray.taskapi.exception.NotFoundException;
+import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -80,6 +81,30 @@ public class CommonControllerAdvice {
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(ValidationFailedException.class)
+    public ResponseEntity<Error> validationFail(ValidationFailedException e, HttpServletRequest req) {
+        Error error = Error.builder()
+                .timeStamp(LocalDateTime.now())
+                .status(400)
+                .error(e.getMessage())
+                .path(req.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(HttpClientErrorException.MethodNotAllowed.class)
+    public ResponseEntity<Error> notAllowed(HttpClientErrorException.MethodNotAllowed e, HttpServletRequest req) {
+        Error error = Error.builder()
+                .timeStamp(LocalDateTime.now())
+                .status(e.getRawStatusCode())
+                .error(e.getMessage())
+                .path(req.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
     }
 
 

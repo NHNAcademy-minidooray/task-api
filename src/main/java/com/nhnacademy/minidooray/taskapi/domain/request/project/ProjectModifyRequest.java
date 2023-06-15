@@ -10,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ProjectModifyRequest {
-    @NotBlank
+    @NotBlank(message = "title : 필수 입력값 입니다.")
     @JsonProperty("title")
     private String projectTitle;
-    @NotBlank
+    @NotBlank(message = "content : 필수 입력값 입니다.")
     @JsonProperty("content")
     private String projectContent;
 }
