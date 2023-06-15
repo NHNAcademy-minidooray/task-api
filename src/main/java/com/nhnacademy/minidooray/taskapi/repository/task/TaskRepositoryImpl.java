@@ -98,16 +98,4 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
                 .select(projectMember)
                 .fetchOne();
     }
-
-    @Override
-    public List<TaskListDto> getTaskAll(String projectMemberId) {
-        QTask task = QTask.task;
-        QProjectMember projectMember = QProjectMember.projectMember;
-        return from(task)
-                .innerJoin(task.projectMember, projectMember)
-                .where(projectMember.projectMemberId.eq(projectMemberId))
-                .orderBy(task.taskSeq.desc())
-                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
-                .fetch();
-    }
 }

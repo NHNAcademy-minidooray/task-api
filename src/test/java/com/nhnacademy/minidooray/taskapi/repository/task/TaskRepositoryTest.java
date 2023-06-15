@@ -137,24 +137,6 @@ class TaskRepositoryTest {
 
     @Test
     @Order(6)
-    void getTaskAll() {
-        Task task2 = Task.builder()
-                .taskTitle("task-title2")
-                .taskContent("task-content2")
-                .taskCreatedAt(LocalDateTime.now())
-                .milestone(null)
-                .projectMember(projectMember)
-                .build();
-
-        taskRepository.save(task);
-        taskRepository.save(task2);
-
-        List<TaskListDto> actual = taskRepository.getTaskAll(projectMember.getProjectMemberId());
-        assertThat(actual.size()).isEqualTo(2);
-    }
-
-    @Test
-    @Order(7)
     void save() {
         taskRepository.save(task);
         Task actual = taskRepository.findById(task.getTaskSeq()).get();
@@ -162,7 +144,7 @@ class TaskRepositoryTest {
     }
 
     @Test
-    @Order(8)
+    @Order(7)
     void update1() {
         milestone = Milestone.builder()
                 .project(project)
@@ -191,7 +173,7 @@ class TaskRepositoryTest {
     }
 
     @Test
-    @Order(9)
+    @Order(8)
     void update2() {
 
         Task task2 = Task.builder()
