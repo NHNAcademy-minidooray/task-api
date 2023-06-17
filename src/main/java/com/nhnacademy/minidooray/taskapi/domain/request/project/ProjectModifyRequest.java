@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.domain.request.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@Builder
 public class ProjectModifyRequest {
     @NotBlank(message = "title : 필수 입력값 입니다.")
     @JsonProperty("title")

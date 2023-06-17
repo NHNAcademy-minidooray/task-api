@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @JsonRootName("project")
-@AllArgsConstructor
 public class ProjectDto {
     @JsonProperty("id")
     private Integer projectSeq;
@@ -30,4 +31,5 @@ public class ProjectDto {
     private String projectMemberRole;
     @JsonProperty("status")
     private String statusCodeName;
+
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.lang.Nullable;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Getter
+@Builder
 @JsonRootName("task")
 public class TaskDto {
     @JsonProperty("id")

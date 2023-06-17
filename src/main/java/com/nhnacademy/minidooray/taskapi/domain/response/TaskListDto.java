@@ -2,12 +2,14 @@ package com.nhnacademy.minidooray.taskapi.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Builder
 @JsonRootName("task")
 public class TaskListDto {
     @JsonProperty("id")

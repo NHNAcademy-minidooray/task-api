@@ -2,9 +2,11 @@ package com.nhnacademy.minidooray.taskapi.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @JsonRootName("tag")
 public class TagDto {
     @JsonProperty("id")

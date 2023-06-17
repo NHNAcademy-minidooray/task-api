@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.domain.request.milestone;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
 public class MilestoneRegisterRequest {
     @NotBlank(message = "name : 필수 입력값 입니다.")
     private String name;
