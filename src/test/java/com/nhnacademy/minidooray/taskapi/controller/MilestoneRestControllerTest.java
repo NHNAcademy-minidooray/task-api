@@ -61,6 +61,12 @@ class MilestoneRestControllerTest {
 
     @Test
     void getTasks() {
+        TaskListDto taskListDto = TaskListDto.builder()
+                .taskSeq(1)
+                .taskTitle("task-title")
+                .build();
+
+        List<TaskListDto> tasks = new ArrayList<>();
     }
 
     @Test

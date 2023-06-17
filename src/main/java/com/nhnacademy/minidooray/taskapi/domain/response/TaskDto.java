@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,8 @@ import java.util.Objects;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonRootName("task")
 public class TaskDto {
     @JsonProperty("id")
@@ -36,16 +39,4 @@ public class TaskDto {
     @JsonProperty("tag")
     private List<String> tagNames = new ArrayList<>();
 
-    public TaskDto(Integer taskSeq, String taskTitle, String taskContent, LocalDateTime taskCreatedAt, String projectMemberId, String projectMemberRole, String milestoneName, List<String> tagNames) {
-        this.taskSeq = taskSeq;
-        this.taskTitle = taskTitle;
-        this.taskContent = taskContent;
-        this.taskCreatedAt = taskCreatedAt;
-        this.projectMemberId = projectMemberId;
-        this.projectMemberRole = projectMemberRole;
-        this.milestoneName = milestoneName;
-        if(!Objects.isNull(tagNames)) {
-            this.tagNames = tagNames;
-        }
-    }
 }
