@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS Projects
     `project_seq`        INT          NOT NULL AUTO_INCREMENT,
     `project_title`      VARCHAR(50)  NOT NULL,
     `status_code_seq`    INT          NOT NULL,
-    `project_content`    VARCHAR(100) NULL DEFAULT NULL,
+    `project_content`    VARCHAR(100) NOT NULL,
     `project_created_at` DATETIME     NOT NULL,
     PRIMARY KEY (`project_seq`),
     CONSTRAINT `fk_Project_StatusCode1`

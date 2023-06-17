@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.minidooray.taskapi.domain.request.project.ProjectModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.project.ProjectRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.domain.response.ProjectDto;
@@ -110,7 +111,7 @@ class ProjectRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/{accountId}","test")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerRequest))
+                        .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(registerRequest))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -154,7 +155,7 @@ class ProjectRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/projects/{projectId}",1)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(modifyRequest))
+                        .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(modifyRequest))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
