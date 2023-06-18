@@ -42,6 +42,7 @@ public class Task {
 
     @OneToMany(mappedBy = "task", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Task(String taskTitle, String taskContent, LocalDateTime taskCreatedAt, Milestone milestone, ProjectMember projectMember) {
         this.taskTitle = taskTitle;

@@ -80,7 +80,7 @@ public class MilestoneService {
                 () -> new NotFoundException("등록되지 않은 마일스톤 입니다."));
 
         milestoneRepository.getMileStone(milestoneSeq).orElseThrow(
-                () -> new NotFoundException("해당 프로젝트데 등록되지 않은 마일스톤 입니다."));
+                () -> new NotFoundException("해당 프로젝트에 등록되지 않은 마일스톤 입니다."));
 
         milestone.update(modifyRequest.getName(), modifyRequest.getStart(), modifyRequest.getEnd());
 
@@ -96,7 +96,7 @@ public class MilestoneService {
                 () -> new NotFoundException("등록되지 않은 마일스톤 입니다."));
 
         milestoneRepository.getMileStone(milestoneSeq).orElseThrow(
-                () -> new NotFoundException("해당 프로젝트데 등록되지 않은 마일스톤 입니다."));
+                () -> new NotFoundException("해당 프로젝트에 등록되지 않은 마일스톤 입니다."));
 
         milestoneRepository.delete(milestone);
     }

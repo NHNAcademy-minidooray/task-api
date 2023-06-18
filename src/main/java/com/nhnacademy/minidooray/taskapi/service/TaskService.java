@@ -89,11 +89,9 @@ public class TaskService {
 
         Milestone milestone = null;
         if (Objects.nonNull(registerRequest.getMilestoneName())) {
-            milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName()).get();
 
-            if(Objects.isNull(milestone)) {
-                throw  new NotFoundException("등록되지 않은 마일스톤입니다.");
-            }
+            milestone = milestoneRepository.findByMilestoneName(registerRequest.getMilestoneName())
+                    .orElseThrow(() -> new NotFoundException("등록되지 않은 마일스톤입니다."));
         }
 
         List<Tag> tags = new ArrayList<>();
