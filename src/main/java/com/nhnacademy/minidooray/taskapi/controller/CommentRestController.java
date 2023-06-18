@@ -31,7 +31,7 @@ public class CommentRestController {
         return ResponseEntity.ok(commentService.getComment(projectId, taskId, commentId));
     }
 
-    @GetMapping("/comments/{accountId}")
+    @GetMapping("/projects/comments/{accountId}")
     public ResponseEntity<List<CommentDto>> getMyComments(@PathVariable String accountId) {
         return ResponseEntity.ok(commentService.getMyComment(accountId));
     }

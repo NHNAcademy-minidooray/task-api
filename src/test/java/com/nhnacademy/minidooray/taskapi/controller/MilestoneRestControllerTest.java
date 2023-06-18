@@ -2,13 +2,13 @@ package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nhnacademy.minidooray.taskapi.domain.request.milestone.MilestoneModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.milestone.MilestoneRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.domain.response.MilestoneDto;
 import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
+import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.MilestoneService;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,9 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,6 +39,7 @@ class MilestoneRestControllerTest {
 
 
     @Test
+    @Order(1)
     void getMilestones() throws Exception {
         MilestoneDto milestoneDto = MilestoneDto.builder()
                 .name("milestone")
@@ -63,11 +61,15 @@ class MilestoneRestControllerTest {
     }
 
     @Test
+    @Order(2)
     void getTasks() throws Exception {
-        TaskListDto taskListDto = TaskListDto.builder()
+        TaskListDto taskListDto= TaskListDto.builder()
                 .taskSeq(1)
-                .taskTitle("task-title")
+                .taskTitle("task-title-1")
+                .projectSeq(1)
+                .projectTitle("project-1")
                 .build();
+
 
         List<TaskListDto> tasks = new ArrayList<>();
         tasks.add(taskListDto);
@@ -82,6 +84,7 @@ class MilestoneRestControllerTest {
     }
 
     @Test
+    @Order(3)
     void getMilestone() throws Exception {
         MilestoneDto milestoneDto = MilestoneDto.builder()
                 .name("milestone")
@@ -100,6 +103,7 @@ class MilestoneRestControllerTest {
     }
 
     @Test
+    @Order(4)
     void createMilestone() throws Exception{
         MilestoneDto milestoneDto = MilestoneDto.builder()
                 .name("milestone")
@@ -121,14 +125,71 @@ class MilestoneRestControllerTest {
                         .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
                         .andDo(print())
+                        .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.name").value(request.getName()));
     }
 
     @Test
-    void modifyMilestone() {
+    @Order(5)
+    void createMilestoneNullTest() {
+        MilestoneRegisterRequest request = MilestoneRegisterRequest.builder()
+                .name(null)
+                .build();
+        when(milestoneService.createMilestone(request, 1)).thenThrow(ValidationFailedException.class);
+
+        Assertions.assertThrows(ValidationFailedException.class,
+                () -> milestoneService.createMilestone(request, 1));
     }
 
     @Test
-    void deleteMilestone() {
+    @Order(6)
+    void modifyMilestone() throws Exception{
+        MilestoneDto milestoneDto = MilestoneDto.builder()
+                .name("milestone-update")
+                .id(1)
+                .start(LocalDate.now())
+                .end(null)
+                .build();
+
+        MilestoneModifyRequest request = MilestoneModifyRequest.builder()
+                .name("milestone-update")
+                .start(LocalDate.now())
+                .end(null)
+                .build();
+
+        when(milestoneService.modifyMilestone(any(), any(), any())).thenReturn(milestoneDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/projects/{projectId}/milestones/{milestoneId}", 1, 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(request))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(milestoneDto.getName()));
+
+    }
+
+    @Test
+    @Order(7)
+    void modifyMilestoneNullTest() throws Exception{
+        MilestoneModifyRequest request = MilestoneModifyRequest.builder()
+                .name("")
+                .start(LocalDate.now())
+                .end(null)
+                .build();
+
+        when(milestoneService.modifyMilestone(request, 1, 1)).thenThrow(ValidationFailedException.class);
+        Assertions.assertThrows(ValidationFailedException.class,
+                () -> milestoneService.modifyMilestone(request,1, 1));
+
+    }
+
+    @Test
+    @Order(8)
+    void deleteMilestone() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.delete("/projects/{projectId}/milestones/{milestoneId}", 1, 1)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 }

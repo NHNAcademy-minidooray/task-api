@@ -33,7 +33,8 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
                 .innerJoin(task.projectMember, projectMember)
                 .where(projectMember.project.projectSeq.eq(projectSeq))
                 .orderBy(task.taskSeq.desc())
-                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
+                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle,
+                        projectMember.project.projectSeq, projectMember.project.projectTitle))
                 .fetch();
     }
 
@@ -83,7 +84,8 @@ public class TaskRepositoryImpl extends QuerydslRepositorySupport implements Tas
                 .where(task.projectMember.projectMemberId.eq(projectMemberId))
                 .distinct()
                 .orderBy(task.taskSeq.desc())
-                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
+                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle,
+                        projectMember.project.projectSeq, projectMember.project.projectTitle))
                 .fetch();
     }
 

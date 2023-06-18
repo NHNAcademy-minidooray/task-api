@@ -42,7 +42,8 @@ public class TagRepositoryImpl extends QuerydslRepositorySupport implements TagR
                 .where(projectMember.project.projectSeq.eq(projectSeq))
                 .where(tag.tagSeq.eq(tagSeq))
                 .distinct()
-                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
+                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle,
+                        projectMember.project.projectSeq, projectMember.project.projectTitle))
                 .fetch();
     }
 

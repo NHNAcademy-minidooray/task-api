@@ -159,7 +159,7 @@ GET http://localhost:8080/projects/1/tasks/2/comments/2
 
 
 ### 해당 계정의 모든 댓글 조회
-GET http://localhost:8080/comments/goyoungeun
+GET http://localhost:8080/projects/comments/goyoungeun
 
 
 ### 댓글 등록
@@ -267,8 +267,3 @@ Content-Type: application/json
 
 ### 해당 프로젝트의 해당 업무 삭제
 DELETE http://localhost:8080/projects/1/tasks/5/accounts/mooneunji
-
-
-# taskTags
-###
-GET http://localhost:8080/tasktags/3

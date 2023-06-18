@@ -121,15 +121,15 @@ class ProjectRestControllerTest {
 
     @Test
     @Order(4)
-    void createProjectTitleNullTest() throws Exception{
+    void createProjectNullTest() {
         ProjectRegisterRequest registerRequest = ProjectRegisterRequest.builder()
                 .projectContent("content")
                 .build();
 
-        when(projectService.createProject(any(), any())).thenThrow(ValidationFailedException.class);
+        when(projectService.createProject(registerRequest, "test")).thenThrow(ValidationFailedException.class);
 
         Assertions.assertThrows(ValidationFailedException.class,
-                () -> projectService.createProject(any(), any()));
+                () -> projectService.createProject(registerRequest, "test"));
     }
 
     @Test
@@ -165,15 +165,15 @@ class ProjectRestControllerTest {
 
     @Test
     @Order(6)
-    void modifyProjectNullTest() throws Exception{
+    void modifyProjectNullTest() {
         ProjectModifyRequest modifyRequest = ProjectModifyRequest.builder()
                 .projectTitle("title-update")
                 .build();
 
-        when(projectService.modifyProject(any(), any())).thenThrow(ValidationFailedException.class);
+        when(projectService.modifyProject(modifyRequest, 1)).thenThrow(ValidationFailedException.class);
 
         Assertions.assertThrows(ValidationFailedException.class,
-                () -> projectService.modifyProject(any(), any()));
+                () -> projectService.modifyProject(modifyRequest, 1));
 
     }
 

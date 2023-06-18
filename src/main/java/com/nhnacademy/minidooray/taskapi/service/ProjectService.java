@@ -22,8 +22,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final StatusCodeRepository statusCodeRepository;
     private final ProjectMemberRepository projectMemberRepository;
+    private final StatusCodeRepository statusCodeRepository;
 
     /**
      * 모든 프로젝트 조회

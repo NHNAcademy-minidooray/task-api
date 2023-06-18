@@ -52,7 +52,8 @@ public class MilestoneRepositoryImpl extends QuerydslRepositorySupport implement
                 .innerJoin(task.projectMember, projectMember)
                 .where(milestone.milestoneSeq.eq(milestoneSeq))
                 .distinct()
-                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle))
+                .select(Projections.constructor(TaskListDto.class, task.taskSeq, task.taskTitle,
+                        projectMember.project.projectSeq, projectMember.project.projectTitle))
                 .fetch();
     }
 }

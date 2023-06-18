@@ -20,5 +20,9 @@ public class TaskListDto {
     private Integer taskSeq;
     @JsonProperty("title")
     private String taskTitle;
+    @JsonProperty("project-id")
+    private Integer projectSeq;
+    @JsonProperty("project-title")
+    private String projectTitle;
 
 }

@@ -44,7 +44,7 @@ public class TaskRestController {
     }
 
     /**
-     * 해당 작성자가 작성한 업무 리스트 조회
+     * 해당 작성자가 해당 프로젝트에서 작성한 업무 리스트 조회
      * @param projectId
      * @param accountId
      * @return 작성자가 작성한 업무 리스트
@@ -54,6 +54,11 @@ public class TaskRestController {
         return ResponseEntity.ok(taskService.getTasks(projectId, accountId));
     }
 
+    /**
+     * 해당 작성자가 작성한 모든 업무 리스트 조회
+     * @param accountId
+     * @return
+     */
     @GetMapping("/projects/tasks/{accountId}")
     public ResponseEntity<List<TaskListDto>> getTaskAll(@PathVariable String accountId) {
         return ResponseEntity.ok(taskService.getTaskAll(accountId));

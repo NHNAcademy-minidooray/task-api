@@ -19,7 +19,7 @@ public class TagDto {
     @JsonProperty("name")
     private String tagName;
 
-    @JsonProperty("project_id")
+    @JsonProperty("project-id")
     private Integer projectSeq;
 
 }
