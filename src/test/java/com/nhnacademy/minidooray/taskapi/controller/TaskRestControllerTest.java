@@ -2,16 +2,13 @@ package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskModifyRequest;
 import com.nhnacademy.minidooray.taskapi.domain.request.task.TaskRegisterRequest;
 import com.nhnacademy.minidooray.taskapi.domain.response.TaskDto;
 import com.nhnacademy.minidooray.taskapi.domain.response.TaskListDto;
-import com.nhnacademy.minidooray.taskapi.entity.Task;
 import com.nhnacademy.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhnacademy.minidooray.taskapi.service.TaskService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,7 +21,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,7 +41,8 @@ class TaskRestControllerTest {
 
 
     @Test
-    void getProjectTasks() throws Exception{
+    @Order(1)
+    void getProjectTasks() throws Exception {
         TaskListDto taskListDto1 = TaskListDto.builder()
                 .taskSeq(1)
                 .taskTitle("task-title-1")
@@ -64,8 +61,8 @@ class TaskRestControllerTest {
 
         when(taskService.getProjectTasks(any())).thenReturn(tasks);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/projects/{projectId}/tasks",1)
-                .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/projects/{projectId}/tasks", 1)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value(taskListDto1.getTaskTitle()))
@@ -73,7 +70,8 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void getTask() throws Exception{
+    @Order(2)
+    void getTask() throws Exception {
         TaskDto taskDto = TaskDto.builder()
                 .taskSeq(1)
                 .taskTitle("task-title-1")
@@ -88,7 +86,7 @@ class TaskRestControllerTest {
         when(taskService.getTask(anyInt(), anyInt())).thenReturn(taskDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/projects/{projectId}/tasks/{taskId}", 1, 1)
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.tag[0]").value("tag1"))
@@ -97,7 +95,8 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void getTasks() throws Exception{
+    @Order(3)
+    void getTasks() throws Exception {
         TaskListDto taskListDto1 = TaskListDto.builder()
                 .taskSeq(1)
                 .taskTitle("task-title-1")
@@ -116,8 +115,8 @@ class TaskRestControllerTest {
 
         when(taskService.getTasks(anyInt(), anyString())).thenReturn(tasks);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/projects/{projectId}/tasks/accounts/{accountId}",1,"member-1")
-                .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/projects/{projectId}/tasks/accounts/{accountId}", 1, "member-1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -125,7 +124,8 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void getTaskAll() throws Exception{
+    @Order(4)
+    void getTaskAll() throws Exception {
         TaskListDto taskListDto1 = TaskListDto.builder()
                 .taskSeq(1)
                 .taskTitle("task-title-1")
@@ -144,7 +144,7 @@ class TaskRestControllerTest {
 
         when(taskService.getTaskAll(any())).thenReturn(tasks);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/projects/tasks/{accountId}","member-1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/projects/tasks/{accountId}", "member-1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -154,7 +154,8 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void createTask() throws Exception{
+    @Order(5)
+    void createTask() throws Exception {
         TaskDto taskDto = TaskDto.builder()
                 .taskSeq(1)
                 .taskTitle("task-title-1")
@@ -175,10 +176,10 @@ class TaskRestControllerTest {
 
         when(taskService.createTask(any(), any(), any())).thenReturn(taskDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/projects/{projectId}/tasks/accounts/{accountId}",1,"member-1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(request))
-                .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.post("/projects/{projectId}/tasks/accounts/{accountId}", 1, "member-1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.writer").value("member-1"));
@@ -186,6 +187,7 @@ class TaskRestControllerTest {
     }
 
     @Test
+    @Order(6)
     void createTaskNullTest() {
         TaskRegisterRequest request = TaskRegisterRequest.builder()
                 .content(null)
@@ -199,42 +201,64 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void modifyTask() throws Exception{
+    @Order(7)
+    void modifyTask() throws Exception {
         TaskDto taskDto = TaskDto.builder()
                 .taskSeq(1)
                 .taskTitle("task-title-1")
-                .taskCreatedAt(LocalDateTime.now())
                 .taskContent("task-content-1")
+                .taskCreatedAt(LocalDateTime.now())
                 .milestoneName(null)
+                .tagNames(List.of("tag3"))
                 .projectMemberId("member-1")
                 .projectMemberRole("ROLE_MEMBER")
-                .tagNames(List.of("tag3"))
                 .build();
 
-        TaskRegisterRequest request = TaskRegisterRequest.builder()
+        TaskModifyRequest request = TaskModifyRequest.builder()
+                .title("task-title-1")
                 .content("task-content-1")
                 .milestoneName(null)
-                .tagNames(List.of("tag2"))
-                .title("task-title-1")
+                .tagNames(List.of("tag3"))
                 .build();
 
         when(taskService.modifyTask(any(), any(), any(), any())).thenReturn(taskDto);
 
-//        mockMvc.perform(MockMvcRequestBuilders.patch("/projects/{projectId}/tasks/accounts/{accountId}",1,"member-1")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(request))
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.writer").value("member-1"));
+        mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/projects/{projectId}/tasks/{taskId}/accounts/{accountId}", 1, 1, "member-1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.writer").value("member-1"))
+                .andExpect(jsonPath("$.tag[0]").value("tag3"))
+                .andExpect(jsonPath("$.milestone").doesNotExist());
     }
 
     @Test
+    @Order(8)
     void modifyTaskNullTest() {
+        TaskModifyRequest request = TaskModifyRequest.builder()
+                .title("task-title-1")
+                .content(null)
+                .milestoneName(null)
+                .tagNames(List.of("tag3"))
+                .build();
+
+        when(taskService.modifyTask(request, 1, 1, "member-1")).thenThrow(ValidationFailedException.class);
+
+        Assertions.assertThrows(ValidationFailedException.class,
+                () -> taskService.modifyTask(request, 1, 1, "member-1"));
     }
 
 
     @Test
-    void deleteTask() {
+    @Order(9)
+    void deleteTask() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/projects/{projectId}/tasks/{taskId}/accounts/{accountId}", 1, 1, "member-1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 }
